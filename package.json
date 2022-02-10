@@ -1,0 +1,46 @@
+{
+  "name": "shoes-store",
+  "version": "1.0.0",
+  "description": "final semester project about shoes store",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --inspect src/index.js",
+    "style": "node-sass --watch src/resource/scss/ --output src/public/css/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dlowji/shoes-store.git"
+  },
+  "keywords": [
+    "project",
+    "shoes-store",
+    "reactjs",
+    "nodejs"
+  ],
+  "author": "Dlowji, s1mpleOW",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dlowji/shoes-store/issues"
+  },
+  "homepage": "https://github.com/dlowji/shoes-store#readme",
+  "lint-staged": {
+    "src/**/*.{js, json, scss}": "prettier --single-quote --trailing-comma all --tab-width 4 --write"
+  },
+  "husky": {
+    "pre-commit": "lint-staged"
+  },
+  "dependencies": {
+    "express": "^4.17.2",
+    "express-handlebars": "^6.0.2",
+    "mongoose": "^6.2.1"
+  },
+  "devDependencies": {
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.3",
+    "morgan": "^1.10.0",
+    "node-sass": "^7.0.1",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.5.1"
+  }
+}
