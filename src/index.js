@@ -18,7 +18,7 @@ app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'resources', 'views'));
 
 //Connect database
-// db.connect();
+db.connect();
 
 //Routes init
 route(app);
