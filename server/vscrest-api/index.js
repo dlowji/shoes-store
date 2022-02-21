@@ -1,14 +1,23 @@
-const path = require('path');
 const express = require('express');
+const dotenv = require('dotenv');
 const morgan = require('morgan');
 const { engine } = require('express-handlebars');
 const route = require('./routes');
 const db = require('./config/db');
+const path = require('path');
 const app = express();
-const port = 3000;
+
+//Load config
+dotenv.config({
+    path: `${__dirname}/config/config.env`
+})
+
+const PORT = process.env.PORT || 3333;
+
 
 //Set path for static file
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 //Set template engine
 app.engine('hbs', engine({
@@ -23,6 +32,6 @@ db.connect();
 //Routes init
 route(app);
 
-app.listen(port,() => {
-    console.log(`App is listening on http://localhost:${port}`);
+app.listen(PORT,() => {
+    console.log(`App is listening on http://localhost:${PORT}`);
 })
