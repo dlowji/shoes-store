@@ -2,10 +2,12 @@ const Shoe = require('../models/Shoe')
 
 class ProductController {
     // [GET] /product
-    index(req, res, next) {
-        Shoe.find({})
+    async index(req, res, next) {
+        await Shoe.find({})
             .then(shoes => res.json(shoes))
-            .catch(next)
+            .catch(err => {
+                return res.status(500).send('Cannot get products')
+            })
             
     }
 }
