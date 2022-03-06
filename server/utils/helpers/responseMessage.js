@@ -4,6 +4,7 @@ const errorMessage = (res, code, message) => {
 
 const successMessage = (res, data, message) => {
     return res.json({
+        code: 0,
         data,
         message
     })

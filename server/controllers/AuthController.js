@@ -11,10 +11,10 @@ class AuthController {
 
         //Check exist account
         const existUsername = await User.findOne({ username: req.body.username });
-        if (existUsername) return res.status(500).send('Username has already used by another user');
+        if (existUsername) return errorMessage(res, 500, 'Username has already used by another user');
 
         const existEmail = await User.findOne({ email: req.body.email });
-        if (existEmail) return res.status(500).send('Email has already used by another user');
+        if (existEmail) return errorMessage(res, 500, 'Email has already used by another user');
 
         //Hash password
         const salt = await bcrypt.genSalt(10);
@@ -29,9 +29,9 @@ class AuthController {
 
         try {
             const savedUser = await user.save();
-            res.json(savedUser._id);
+            successMessage(res, savedUser._id, 'User saved successfully');
         } catch (err) {
-            res.status(500).send(err);
+            errorMessage(res, 500, err.message);
         }
 
     }
@@ -39,15 +39,15 @@ class AuthController {
     async login(req, res) {
         //VALIDATE 
         const { error } = loginValidate(req.body);
-        if (error) return res.status(500).send(error.details[0].message);
+        if (error) return errorMessage(res, 500, error.details[0].message);
 
         //Check exist account
         const existAccount = await User.findOne({ username: req.body.username });
-        if (!existAccount) return res.status(500).send('Wrong username or password');
+        if (!existAccount) return errorMessage(res, 500, 'Wrong username or password');
 
         //Detect password
         const validPass = await bcrypt.compare(req.body.password, existAccount.password);
-        if (!validPass) return res.status(500).send('Wrong username or password');
+        if (!validPass) return errorMessage(res, 500, 'Wrong username or password');
 
         res.json('Logged')
 

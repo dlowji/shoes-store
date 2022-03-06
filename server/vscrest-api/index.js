@@ -9,6 +9,8 @@ const path = require('path');
 const app = express();
 const Joi = require('joi');
 
+const cors = require('cors');
+
 //Load config
 dotenv.config({
     path: `${__dirname}/.env`
