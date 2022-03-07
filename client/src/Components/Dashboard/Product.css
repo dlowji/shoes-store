@@ -1,0 +1,25 @@
+.custom-file-input {
+	@apply text-primary;
+	display: inline-block;
+}
+.custom-file-input::-webkit-file-upload-button {
+	visibility: hidden;
+}
+.custom-file-input::before {
+	content: 'Select some files';
+	@apply text-primary;
+	@apply border-primary;
+	display: inline-block;
+	border: 1px solid;
+	border-radius: 5px;
+	padding: 5px 8px;
+	outline: none;
+	white-space: nowrap;
+	cursor: pointer;
+	text-shadow: 1px 1px #fff;
+	font-weight: 700;
+	font-size: 10pt;
+}
+.custom-file-input:hover::before {
+	opacity: 0.8;
+}

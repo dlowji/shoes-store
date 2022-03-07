@@ -59,25 +59,6 @@ const SignUpForm = ({ mounted, setMounted, setSignIn }) => {
 		>
 			<div className="w-full max-w-[470px] mx-auto bg-secondary px-3 py-5 rounded-xl flex flex-col justify-center">
 				<h2 className="mb-3 text-2xl font-bold text-center uppercase text-third">Register</h2>
-				{/* <div className="flex flex-col gap-3 mx-10 my-2 md:flex-row md:mx-3">
-					<Button
-						text={'Sign up with Google'}
-						className={'normal-case w-full md:w-1/2 flex flex-col items-center gap-1'}
-					>
-						<i className="fab fa-google"></i>
-					</Button>
-					<Button
-						text={'Sign up with Facebook'}
-						className={
-							'bg-primary text-secondary normal-case hover:opacity-80 w-full md:w-1/2 flex flex-col items-center gap-1'
-						}
-					>
-						<i className="fa-brands fa-facebook-f"></i>
-					</Button>
-				</div>
-				<div className="my-2">
-					<span className="text-center block text-[20px] uppercase font-bold classOr">or</span>
-				</div> */}
 				<form autoComplete="off" onSubmit={handleSubmit(onSubmitHandler)}>
 					<div className="flex flex-col gap-2">
 						<label htmlFor="userNameSignup">User name</label>

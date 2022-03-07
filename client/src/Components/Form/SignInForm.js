@@ -34,7 +34,6 @@ const SignInForm = ({ mounted, setUser, setMounted, setSignUp }) => {
 			document.removeEventListener('click', handleClick);
 		};
 	});
-
 	const handleSignUp = () => {
 		setMounted(false);
 		setSignUp(true);
@@ -62,7 +61,7 @@ const SignInForm = ({ mounted, setUser, setMounted, setSignUp }) => {
 				<div className="flex flex-col gap-3 mx-10 my-5 md:justify-center md:items-center md:mx-10 md:flex-row">
 					<Button
 						text={'Sign in with Google'}
-						className={'flex-1 normal-case'}
+						className={'flex-1 normal-case text-primary'}
 						onClick={() => handleSignIn(googleProvider)}
 					></Button>
 					<Button
