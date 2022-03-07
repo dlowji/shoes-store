@@ -19,9 +19,9 @@ const Dashboard = () => {
 	const handleEditProduct = () => {
 		editProduct.setShow(true);
 	};
-	console.log(123);
+	console.log(products);
 	React.useEffect(() => {
-		fetchProducts().then((response) => setProducts(response));
+		fetchProducts().then((response) => setProducts(response.data));
 	}, []);
 	return (
 		<div

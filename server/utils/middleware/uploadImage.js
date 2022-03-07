@@ -11,6 +11,7 @@ function uploadImage(req, res) {
 
     form.parse(req, (err, fields, files) => {
         if (err) return res.status(500).send(err.message);
+        console.log(files);
 
         const imgName = `img${global.id++}.png`;
         const oldPath = files.photo[0].path;

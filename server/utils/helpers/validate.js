@@ -20,12 +20,10 @@ const loginValidate = user => {
 
 const productValidate = product => {
     const schema = Joi.object({
-        name: Joi.string().min(8).max(32).required(),
-        price: Joi.number().required(),
-        brand: Joi.string().required(),
-        code: Joi.string().required(),
-        desc: Joi.string().required(),
-        size: Joi.array().required(),
+        nameProduct: Joi.string().min(8).max(32).required(),
+        brandProduct: Joi.string().required(),
+        priceProduct: Joi.number().required(),
+        descriptionProduct: Joi.string().required(),
     })
     return schema.validate(product);
 }

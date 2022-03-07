@@ -6,6 +6,7 @@ const Shoe = require('../models/Shoe')
 class AdminController {
     //[POST] /admin/product/create
     async createProduct(req, res) {
+        console.log(req.body)
         const { error } = productValidate(req.body);
         if (error) return errorMessage(res, 500, error.details[0].message);
 
@@ -14,7 +15,7 @@ class AdminController {
             price: req.body.price,
             imgUrl: uploadImage(),
             brand: req.body.brand,
-            code: req.body.code,
+            code: 'LOIVO',
             desc: req.body.desc,
             size: ['8.5US', '9US', '9.5US']
         });
@@ -65,7 +66,7 @@ class AdminController {
     }
 
     //[POST] /admin/user/create
-    createUser(req, res) {
+    async createUser(req, res) {
         const { error } = productValidate(req.body);
         if (error) return errorMessage(res, 500, error.details[0].message);
 
@@ -88,7 +89,7 @@ class AdminController {
     }
 
     //[PUT] /admin/user/update/:id
-    updateUser(req, res) {
+    async updateUser(req, res) {
         const filter = {_id: req.params.id};
         const update = {
             name: req.body.name,
@@ -113,7 +114,7 @@ class AdminController {
     }
 
     //[DELETE] /admin/user/delete/:id
-    deleteUser(req, res) {
+    async deleteUser(req, res) {
         const filter = {_id: req.params.id};
         await Shoe.deleteOne(filter)
             .then(deletedCount => {
