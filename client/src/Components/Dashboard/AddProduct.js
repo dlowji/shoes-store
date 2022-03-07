@@ -34,7 +34,16 @@ const AddProduct = React.forwardRef(({ mounted }, ref) => {
 		resolver: yupResolver(scheme),
 	});
 	const onSubmitHandler = (values) => {
-		console.log({ ...values, imageProduct: selectedImage });
+		const data = { ...values, imageProduct: {...selectedImage} };
+		console.log(data)
+		fetch('http://localhost:5555/admin/product/create', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		})
+			.then()
 	};
 
 	return (

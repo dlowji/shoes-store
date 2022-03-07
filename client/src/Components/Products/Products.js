@@ -15,7 +15,7 @@ const Products = () => {
 		setLoading(true);
 		fetchProducts().then((response) => {
 			console.log(response);
-			setProducts(response);
+			setProducts(response.data);
 			setLoading(false);
 		});
 	}, []);

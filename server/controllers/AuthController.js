@@ -29,7 +29,7 @@ class AuthController {
 
         try {
             const savedUser = await user.save();
-            successMessage(res, savedUser._id, 'User saved successfully');
+            successMessage(res, savedUser._id, 'User created successfully');
         } catch (err) {
             errorMessage(res, 500, err.message);
         }

@@ -18,4 +18,14 @@ const loginValidate = user => {
     return schema.validate(user);
 }
 
-module.exports = { registerValidate, loginValidate };
+const productValidate = product => {
+    const schema = Joi.object({
+        nameProduct: Joi.string().min(8).max(32).required(),
+        brandProduct: Joi.string().required(),
+        priceProduct: Joi.number().required(),
+        descriptionProduct: Joi.string().required(),
+    })
+    return schema.validate(product);
+}
+
+module.exports = { registerValidate, loginValidate, productValidate };
