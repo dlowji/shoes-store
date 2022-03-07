@@ -4,8 +4,8 @@
   "description": "final semester project about shoes store",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node server/vscrest-api/index",
-    "dev": "cross-env NODE_ENV=development nodemon server/vscrest-api/index",
+    "start": "cross-env NODE_ENV=production node server/index",
+    "dev": "cross-env NODE_ENV=development nodemon server/index",
     "style": "node-sass --watch src/resource/scss/ --output src/public/css/"
   },
   "repository": {
@@ -39,7 +39,8 @@
     "express": "^4.17.2",
     "express-handlebars": "^6.0.2",
     "joi": "^17.6.0",
-    "mongoose": "^6.2.1"
+    "mongoose": "^6.2.1",
+    "multiparty": "^4.2.3"
   },
   "devDependencies": {
     "husky": "^7.0.4",
