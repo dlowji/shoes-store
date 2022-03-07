@@ -6,8 +6,8 @@ const cors = require('cors');
 function route(app) {
     
     app.use('/products', cors(),  productRouter);
-    app.use('/auth', authRouter);
-    app.use('/', siteRouter);
+    app.use('/auth', cors(), authRouter);
+    app.use('/', cors(), siteRouter);
 
 }
 
