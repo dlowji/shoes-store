@@ -19,7 +19,7 @@ ReactDOM.render(
 					<Route path=":productId" element={<ProductCard />} />
 				</Route>
 				<Route path="contact" element={<Contact />} />
-				<Route path="dashboard" element={<Dashboard />}></Route>
+				<Route path="dashboard" element={<Dashboard />} />
 				<Route path="*" element={<NotFound />} />
 			</Route>
 		</Routes>

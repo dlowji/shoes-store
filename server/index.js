@@ -10,12 +10,12 @@ const app = express();
 
 //Load config
 dotenv.config({
-    path: `${__dirname}/.env`
-})
+	path: `${__dirname}/.env`,
+});
 
 //Morgan
 if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'));
+	app.use(morgan('dev'));
 }
 
 //JSON Body
@@ -23,7 +23,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3333;
-
 
 //Set path for static file
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,6 +33,6 @@ db.connect();
 //Routes init
 route(app);
 
-app.listen(PORT,() => {
-    console.log(`App is listening on http://localhost:${PORT}`);
-})
+app.listen(PORT, () => {
+	console.log(`App is listening on http://localhost:${PORT}`);
+});

@@ -36,7 +36,6 @@ const Sidebar = ({ user, setUser, activeSidebar, setActiveSidebar }) => {
 			className={`fixed top-0 left-0 bottom-0 bg-secondary min-w-[200px] transition-all duration-500 ease-in-out shadow-lg ${
 				activeSidebar ? 'translate-x-0' : '-translate-x-full'
 			}`}
-			onClick={() => setActiveSidebar(false)}
 		>
 			<div className="flex flex-col h-full px-5 pt-5 pb-20">
 				<div className="flex items-center justify-between">
@@ -45,7 +44,10 @@ const Sidebar = ({ user, setUser, activeSidebar, setActiveSidebar }) => {
 						alt="avatar"
 						className="block object-cover w-[30px] h-[30px] rounded-full"
 					/>
-					<i className="flex items-center justify-center w-[30px] h-[30px] p-3 ml-auto rounded-full cursor-pointer fa fa-times bg-primary text-secondary"></i>
+					<i
+						className="flex items-center justify-center w-[30px] h-[30px] p-3 ml-auto rounded-full cursor-pointer fa fa-times bg-primary text-secondary"
+						onClick={() => setActiveSidebar(false)}
+					></i>
 				</div>
 				<div className="flex flex-col gap-10 mt-10 text-center">
 					{dashboard.map((item, index) => {
