@@ -108,7 +108,7 @@ const Dashboard = () => {
 				<AddProduct setAddProduct={setAddProduct} setProducts={setProducts} />
 			</ModalBase>
 			<ModalBase visible={editProduct} onClose={() => setEditProduct(false)}>
-				<EditProduct setEditProduct={setEditProduct} product={product} />
+				<EditProduct setEditProduct={setEditProduct} setProducts={setProducts} product={product} />
 			</ModalBase>
 		</div>
 	);

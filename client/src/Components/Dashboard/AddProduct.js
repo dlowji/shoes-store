@@ -47,9 +47,9 @@ const AddProduct = ({ setAddProduct, setProducts }) => {
 			method: 'POST',
 			body: form,
 		})
-			.then((res) => res.text())
 			.then((res) => {
-				if (JSON.parse(res).data) {
+				console.log(res);
+				if (res.status === 200) {
 					setAddProduct(false);
 					fetchProducts().then((response) => {
 						setProducts(response.data);

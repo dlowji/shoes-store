@@ -6,9 +6,9 @@ import * as yup from 'yup';
 import Input from '../Form/Input/Input';
 import TextArea from '../Form/TextArea/TextArea';
 import './Product.css';
-import updateProduct from '../Products/updateProduct';
+import fetchProducts from '../Products/getProducts';
 
-const EditProduct = ({ product }) => {
+const EditProduct = ({ setEditProduct, setProducts, product }) => {
 	const [selectedImage, setSelectedImage] = useState(product.imgUrl);
 	const scheme = yup
 		.object({
@@ -38,12 +38,21 @@ const EditProduct = ({ product }) => {
 		form.append('brandProduct', values.brandProduct);
 		form.append('priceProduct', values.priceProduct);
 		form.append('descriptionProduct', values.descriptionProduct);
-		form.append('imageProduct', selectedImage);
+		if (selectedImage !== product.imgUrl) {
+			form.append('imageProduct', selectedImage);
+		}
+		console.log(form);
 		fetch(`http://localhost:5555/admin/product/update/${product._id}`, {
 			method: 'PUT',
 			body: form,
 		}).then((res) => {
 			console.log(res);
+			if (res.status === 200) {
+				setEditProduct(false);
+				fetchProducts().then((response) => {
+					setProducts(response.data);
+				});
+			}
 		});
 	};
 	return (
