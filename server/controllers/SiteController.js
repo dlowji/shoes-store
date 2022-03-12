@@ -19,6 +19,22 @@ class SiteController {
             .catch(err => errorMessage(res, 500, err.message));
     }
 
+    // [GET] /search/name/:name
+    async searchByBrand(req, res) {
+        if (!(req.params.name)) return errorMessage(res, 500, 'Invalid name');
+
+        await Shoe.find({
+            name: {
+                $regex: new RegExp(req.params.name, 'i'),
+                // $option: 'i'
+            }
+        })
+            .then(data => {
+                return successMessage(res, data, 'Get products by name successfully');
+            })
+            .catch(err => errorMessage(res, 500, err.message));
+    }
+
     // [GET] /
     index(req, res) {
         res.send('home');
