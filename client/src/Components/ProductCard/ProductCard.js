@@ -10,7 +10,7 @@ const ProductCard = () => {
 	React.useLayoutEffect(() => {
 		setLoading(true);
 		fetchProducts().then((response) => {
-			const productFind = response.find((product) => product._id === idFind);
+			const productFind = response.data.find((product) => product._id === idFind);
 			console.log(productFind);
 			setProduct(productFind);
 			setLoading(false);

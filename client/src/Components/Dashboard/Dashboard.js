@@ -1,32 +1,31 @@
 import React from 'react';
 import logo from '../../asset/logoWhite.png';
 import Button from '../Button/Button';
-import Signout from '../Form/Signout';
 import { useOutletContext } from 'react-router-dom';
 import './Dashboard.css';
 import fetchProducts from '../Products/getProducts';
 import useClickOutside from '../../hooks/useClickOutside';
 import EditProduct from './EditProduct';
 import AddProduct from './AddProduct';
+import ModalBase from '../Portal/ModalBase';
 const Dashboard = () => {
 	const { activeSidebar, setActiveSidebar } = useOutletContext();
 	const [products, setProducts] = React.useState([]);
-	const editProduct = useClickOutside();
-	const addProduct = useClickOutside();
+	const [editProduct, setEditProduct] = React.useState(false);
+	const [addProduct, setAddProduct] = React.useState(false);
 	const handleAddProduct = () => {
-		addProduct.setShow(true);
+		setAddProduct(true);
 	};
 	const handleEditProduct = () => {
-		editProduct.setShow(true);
+		setEditProduct(true);
 	};
-	console.log(products);
 	React.useEffect(() => {
 		fetchProducts().then((response) => setProducts(response.data));
 	}, []);
 	return (
 		<div
 			className={`mb-[30px] mr-0 ml-0 px-5 transition-all duration-500 ease-in-out ${
-				true ? 'md:ml-[220px] lg:mr-[100px]' : 'md:mx-auto max-w-[1200px]'
+				activeSidebar ? 'md:ml-[220px] lg:mr-[100px]' : 'md:mx-auto max-w-[1400px]'
 			}`}
 		>
 			<div className="w-full bg-primary h-[100px] rounded-xl mt-5 flex items-center justify-between p-4">
@@ -64,12 +63,12 @@ const Dashboard = () => {
 					<i className="fa-solid fa-plus text-[50px]"></i>
 				</div>
 			</div>
-			<AddProduct mounted={addProduct.show} setMounted={addProduct.setShow} ref={addProduct.ref} />
-			<EditProduct
-				mounted={editProduct.show}
-				setMounted={editProduct.setShow}
-				ref={editProduct.ref}
-			/>
+			<ModalBase visible={addProduct} onClose={() => setAddProduct(false)}>
+				<AddProduct />
+			</ModalBase>
+			<ModalBase visible={editProduct} onClose={() => setEditProduct(false)}>
+				<EditProduct />
+			</ModalBase>
 		</div>
 	);
 };

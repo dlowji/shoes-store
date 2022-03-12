@@ -4,6 +4,7 @@ import './home.css';
 import SliderCard from './SliderCard';
 
 const Home = () => {
+	const [loading, setLoading] = React.useState(false);
 	return (
 		<div className="container">
 			<section className="flex flex-col md:grid grid-rows-[220px,220px,440px] grid-cols-4 gap-3">

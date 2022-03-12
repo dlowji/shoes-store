@@ -18,7 +18,7 @@ const TextArea = ({ control, ...props }) => {
 	}, [text]);
 	return (
 		<textarea
-			className="py-3 outline-none w-full border-b-[1px] border-b-third focus:border-b-primary transition-colors resize-none overflow-hidden"
+			className="py-3 outline-none w-full border-b-[1px] border-b-third focus:border-b-primary transition-colors resize-none overflow-hidden min-h-[56px]"
 			{...field}
 			{...props}
 			value={text}

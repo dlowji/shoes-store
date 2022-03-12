@@ -1,4 +1,5 @@
 import React from 'react';
+import ModalBase from '../Portal/ModalBase';
 import SignInForm from '../Form/SignInForm';
 import SignUpForm from '../Form/SignUpForm';
 
@@ -6,10 +7,10 @@ const Modal = ({ setUser }) => {
 	const [showSignIn, setShowSignIn] = React.useState(false);
 	const [showSignUp, setShowSignUp] = React.useState(false);
 	const handleSignIn = () => {
-		setShowSignIn(!showSignIn);
+		setShowSignIn(() => setShowSignIn(true));
 	};
 	const handleSignUp = () => {
-		setShowSignUp(!showSignUp);
+		setShowSignUp(() => setShowSignUp(true));
 	};
 	return (
 		<>
@@ -30,17 +31,21 @@ const Modal = ({ setUser }) => {
 					</div>
 				</div>
 			</div>
-			<SignInForm
-				mounted={showSignIn}
-				setUser={setUser}
-				setMounted={setShowSignIn}
-				setSignUp={setShowSignUp}
-			></SignInForm>
-			<SignUpForm
-				mounted={showSignUp}
-				setMounted={setShowSignUp}
-				setSignIn={setShowSignIn}
-			></SignUpForm>
+			<ModalBase visible={showSignIn} onClose={() => setShowSignIn(false)}>
+				<SignInForm
+					mounted={showSignIn}
+					setUser={setUser}
+					setMounted={setShowSignIn}
+					setSignUp={setShowSignUp}
+				></SignInForm>
+			</ModalBase>
+			<ModalBase visible={showSignUp} onClose={() => setShowSignUp(false)}>
+				<SignUpForm
+					mounted={showSignUp}
+					setMounted={setShowSignUp}
+					setSignIn={setShowSignIn}
+				></SignUpForm>
+			</ModalBase>
 		</>
 	);
 };
