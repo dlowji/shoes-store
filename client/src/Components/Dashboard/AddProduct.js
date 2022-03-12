@@ -34,17 +34,21 @@ const AddProduct = React.forwardRef(({ mounted }, ref) => {
 		resolver: yupResolver(scheme),
 	});
 	const onSubmitHandler = (values) => {
-		const data = { ...values, imageProduct: {...selectedImage} };
-		console.log(data)
+		let form = new FormData();
+		form.append('nameProduct', values.nameProduct);
+		form.append('brandProduct', values.brandProduct);
+		form.append('priceProduct', values.priceProduct);
+		form.append('descriptionProduct', values.descriptionProduct);
+		form.append('imageProduct', selectedImage);
+		console.log(form)
 		fetch('http://localhost:5555/admin/product/create', {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(data)
+			body: form
 		})
-			.then()
-	};
+			.then(res => res.text())
+			.then(console.log)
+			.catch(err => console.log(err))
+	}
 
 	return (
 		<div
@@ -57,7 +61,7 @@ const AddProduct = React.forwardRef(({ mounted }, ref) => {
 				ref={ref}
 			>
 				<h2 className="mb-3 text-2xl font-bold text-center uppercase text-third">Edit Product</h2>
-				<form autoComplete="off" onSubmit={handleSubmit(onSubmitHandler)}>
+				<form autoComplete="off" onSubmit={handleSubmit(onSubmitHandler)} encType="multipart/form-data">
 					<div className="flex flex-col gap-2">
 						<label htmlFor="nameProduct">Name</label>
 						<Input
@@ -118,6 +122,7 @@ const AddProduct = React.forwardRef(({ mounted }, ref) => {
 							className="outline-none custom-file-input"
 							{...register('imageProduct')}
 							onChange={(event) => {
+								console.log(this)
 								console.log(event.target.files[0]);
 								console.log(event.target.files);
 								setSelectedImage(event.target.files[0]);
