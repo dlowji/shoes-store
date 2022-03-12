@@ -6,10 +6,10 @@ import * as yup from 'yup';
 import Input from '../Form/Input/Input';
 import TextArea from '../Form/TextArea/TextArea';
 import './Product.css';
+import fetchProducts from '../Products/getProducts';
 
-const AddProduct = () => {
+const AddProduct = ({ setAddProduct, setProducts }) => {
 	const [selectedImage, setSelectedImage] = useState(null);
-	const [product, setProduct] = useState({});
 	const form = useRef(null);
 
 	const scheme = yup
@@ -37,22 +37,31 @@ const AddProduct = () => {
 	});
 
 	const onSubmitHandler = (values) => {
-		const data = { ...values, imageProduct: selectedImage };
-		console.log(data);
-		// const data = { ...values, ...selectedImage };
-		// let formData = new FormData(data);
-		// console.log(formData);
-		// fetch('http://localhost:5555/admin/product/create', {
-		// 	method: 'POST',
-		// 	body: formData,
-		// }).then((response) => {
-		// 	console.log(response);
-		// });
+		let form = new FormData();
+		form.append('nameProduct', values.nameProduct);
+		form.append('brandProduct', values.brandProduct);
+		form.append('priceProduct', values.priceProduct);
+		form.append('descriptionProduct', values.descriptionProduct);
+		form.append('imageProduct', selectedImage);
+		fetch('http://localhost:5555/admin/product/create', {
+			method: 'POST',
+			body: form,
+		})
+			.then((res) => res.text())
+			.then((res) => {
+				if (JSON.parse(res).data) {
+					setAddProduct(false);
+					fetchProducts().then((response) => {
+						setProducts(response.data);
+					});
+				}
+			})
+			.catch((err) => console.log(err));
 	};
 
 	return (
 		<div className="w-full max-w-[600px] mx-auto bg-secondary px-3 py-5 rounded-xl flex flex-col justify-center">
-			<h2 className="mb-3 text-2xl font-bold text-center uppercase text-third">Edit Product</h2>
+			<h2 className="mb-3 text-2xl font-bold text-center uppercase text-third">Add Product</h2>
 			<form
 				autoComplete="off"
 				ref={form}
@@ -124,7 +133,11 @@ const AddProduct = () => {
 						}}
 					/>
 					{selectedImage && (
-						<img alt="not found" width={'150px'} src={URL.createObjectURL(selectedImage)} />
+						<img
+							alt="not found"
+							className="w-[150px] h-[150px] object-cover rounded-lg"
+							src={URL.createObjectURL(selectedImage)}
+						/>
 					)}
 				</div>
 				<Button

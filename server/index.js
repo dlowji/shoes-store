@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const multer = require('multer');
 const { engine } = require('express-handlebars');
 const route = require('./routes/index');
 const db = require('./config/db');
@@ -19,8 +20,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 //JSON Body
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+app.use(bodyParser.json({limit: '50mb'}));
 
 const PORT = process.env.PORT || 3333;
 

@@ -28,4 +28,8 @@ const productValidate = product => {
     return schema.validate(product);
 }
 
+const userValidate = user => {
+    return;
+}
+
 module.exports = { registerValidate, loginValidate, productValidate };

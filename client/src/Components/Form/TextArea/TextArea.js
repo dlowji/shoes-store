@@ -1,12 +1,12 @@
 import React from 'react';
 import { useController } from 'react-hook-form';
 
-const TextArea = ({ control, ...props }) => {
+const TextArea = ({ control, value, defaultValue, ...props }) => {
 	const { field } = useController({
 		control,
 		name: props.name,
 	});
-	const [text, setText] = React.useState('');
+	const [text, setText] = React.useState(value || defaultValue);
 	const textareaRef = React.useRef(null);
 	const [textareaHeight, setTextareaHeight] = React.useState('auto');
 	const handleOnInput = (e) => {

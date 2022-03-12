@@ -6,10 +6,10 @@ import * as yup from 'yup';
 import Input from '../Form/Input/Input';
 import TextArea from '../Form/TextArea/TextArea';
 import './Product.css';
+import updateProduct from '../Products/updateProduct';
 
-const EditProduct = () => {
-	const [selectedImage, setSelectedImage] = useState(null);
-	const [product, setProduct] = useState({});
+const EditProduct = ({ product }) => {
+	const [selectedImage, setSelectedImage] = useState(product.imgUrl);
 	const scheme = yup
 		.object({
 			nameProduct: yup.string().required('Name is required'),
@@ -23,14 +23,29 @@ const EditProduct = () => {
 		control,
 		formState: { errors },
 	} = useForm({
-		defaultValues: { nameProduct: '', brandProduct: '', priceProduct: '', descriptionProduct: '' },
+		defaultValues: {
+			nameProduct: product.name,
+			brandProduct: product.brand,
+			priceProduct: product.price,
+			descriptionProduct: product.desc,
+		},
 		resolver: yupResolver(scheme),
 	});
 
 	const onSubmitHandler = (values) => {
-		console.log(values);
+		let form = new FormData();
+		form.append('nameProduct', values.nameProduct);
+		form.append('brandProduct', values.brandProduct);
+		form.append('priceProduct', values.priceProduct);
+		form.append('descriptionProduct', values.descriptionProduct);
+		form.append('imageProduct', selectedImage);
+		fetch(`http://localhost:5555/admin/product/update/${product._id}`, {
+			method: 'PUT',
+			body: form,
+		}).then((res) => {
+			console.log(res);
+		});
 	};
-
 	return (
 		<div className="w-full max-w-[600px] mx-auto bg-secondary px-3 py-5 rounded-xl flex flex-col justify-center">
 			<h2 className="mb-3 text-2xl font-bold text-center uppercase text-third">Edit Product</h2>
@@ -80,6 +95,7 @@ const EditProduct = () => {
 						name="descriptionProduct"
 						id="descriptionProduct"
 						placeholder="Enter your message"
+						defaultValue={product.desc}
 						control={control}
 					></TextArea>
 					<p className="text-[#E74C3C] text-sm font-bold h-5 -top-2">
@@ -99,7 +115,15 @@ const EditProduct = () => {
 						}}
 					/>
 					{selectedImage && (
-						<img alt="not found" width={'150px'} src={URL.createObjectURL(selectedImage)} />
+						<img
+							alt="not found"
+							className="w-[150px] h-[150px] object-cover rounded-lg"
+							src={
+								typeof selectedImage === 'string'
+									? selectedImage
+									: URL.createObjectURL(selectedImage)
+							}
+						/>
 					)}
 				</div>
 				<Button
