@@ -12,8 +12,8 @@ const SliderCard = () => {
 		slidesToShow: 1,
 		slidesToScroll: 1,
 		arrows: true,
+		lazyLoad: true,
 		// autoplay: true,
-		// lazyLoad: true,
 		// autoplaySpeed: 5000,
 		// className: 'slides',
 	};
@@ -21,34 +21,34 @@ const SliderCard = () => {
 		<Slider {...settings} className="flex items-center">
 			<div className="card">
 				<img
-					className="w-full h-full object-cover"
+					className="object-cover w-full h-full"
 					src="https://source.unsplash.com/random/1"
 					alt=""
 				/>
 				<div className="card-content">
-					<h2 className="text-xl font-semibold text-secondary mb-2">Spring 2020</h2>
+					<h2 className="mb-2 text-xl font-semibold text-secondary">Spring 2020</h2>
 					<Button text={'Detail'} className="bg-transparent"></Button>
 				</div>
 			</div>
 			<div className="card">
 				<img
-					className="w-full h-full object-cover"
+					className="object-cover w-full h-full"
 					src="https://source.unsplash.com/random/2"
 					alt=""
 				/>
 				<div className="card-content">
-					<h2 className="text-xl font-semibold text-secondary mb-2">Spring 2020</h2>
+					<h2 className="mb-2 text-xl font-semibold text-secondary">Spring 2020</h2>
 					<Button text={'Detail'} className="bg-transparent"></Button>
 				</div>
 			</div>
 			<div className="card">
 				<img
-					className="w-full h-full object-cover"
+					className="object-cover w-full h-full"
 					src="https://source.unsplash.com/random"
 					alt=""
 				/>
 				<div className="card-content">
-					<h2 className="text-xl font-semibold text-secondary mb-2">Spring 2020</h2>
+					<h2 className="mb-2 text-xl font-semibold text-secondary">Spring 2020</h2>
 					<Button text={'Detail'} className="bg-transparent"></Button>
 				</div>
 			</div>

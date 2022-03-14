@@ -1,19 +1,19 @@
 import React from 'react';
 import Button from '../Button/Button';
 import { useParams } from 'react-router-dom';
-import fetchProducts from '../Products/getProducts';
 import Loading from '../Loading/Loading';
+import getProduct from '../Products/getProduct';
 const ProductCard = () => {
 	const [product, setProduct] = React.useState({});
 	const [loading, setLoading] = React.useState(false);
 	const idFind = useParams().productId;
-	React.useLayoutEffect(() => {
+	React.useEffect(() => {
 		setLoading(true);
-		fetchProducts().then((response) => {
-			const productFind = response.data.find((product) => product._id === idFind);
-			console.log(productFind);
-			setProduct(productFind);
-			setLoading(false);
+		getProduct(idFind).then((response) => {
+			if (response.data) {
+				setProduct(response.data);
+				setLoading(false);
+			}
 		});
 	}, [idFind]);
 	return (

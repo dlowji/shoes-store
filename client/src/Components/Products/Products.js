@@ -10,7 +10,6 @@ const Products = () => {
 	const [products, setProducts] = React.useState([]);
 	const [loading, setLoading] = React.useState(false);
 	const params = useParams().productId;
-	console.log(params);
 	React.useEffect(() => {
 		setLoading(true);
 		fetchProducts().then((response) => {

@@ -10,6 +10,9 @@ import ModalBase from '../Portal/ModalBase';
 import deleteProduct from '../Products/deleteProduct';
 import Loading from '../Loading/Loading';
 import getProduct from '../Products/getProduct';
+import searchProducts from '../Admin/searchProducts';
+import { debounce } from 'lodash';
+
 const Dashboard = () => {
 	const { activeSidebar, setActiveSidebar } = useOutletContext();
 	const [products, setProducts] = React.useState([]);
@@ -40,6 +43,20 @@ const Dashboard = () => {
 			}
 		});
 	};
+	const handleSearchInputChange = debounce((e) => {
+		if (!e.target.value) {
+			fetchProducts().then((response) => {
+				setProducts(response.data);
+			});
+		} else {
+			searchProducts(e.target.value).then((response) => {
+				console.log(response);
+				if (response.data && response.data.length > 0) {
+					setProducts(response.data);
+				}
+			});
+		}
+	}, 500);
 	React.useEffect(() => {
 		setLoading(true);
 		fetchProducts().then((response) => {
@@ -53,6 +70,16 @@ const Dashboard = () => {
 		>
 			<div className="w-full bg-primary h-[100px] rounded-xl mt-5 flex items-center justify-between p-4">
 				<img src={logo} alt="logo" className="block object-cover" />
+				<div className="flex-1 mx-5 overflow-hidden rounded-lg">
+					<input
+						type="search"
+						name="searchInput"
+						id="searchInput"
+						placeholder="Search for products by name"
+						className="w-full px-3 py-2 border-none outline-none text-primary"
+						onChange={handleSearchInputChange}
+					/>
+				</div>
 				<i
 					className="cursor-pointer fa fa-bars text-secondary"
 					onClick={() => setActiveSidebar(!activeSidebar)}
