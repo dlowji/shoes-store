@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const multer = require('multer');
@@ -13,6 +14,9 @@ const app = express();
 dotenv.config({
 	path: `${__dirname}/.env`,
 });
+
+//CORS
+app.use(cors());
 
 //Morgan
 if (process.env.NODE_ENV === 'development') {
