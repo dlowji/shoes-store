@@ -4,7 +4,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 import Button from '../Button/Button';
 import './home.css';
-const SliderCard = () => {
+const SliderCard = ({ products, handleClick }) => {
 	const settings = {
 		dots: true,
 		infinite: true,
@@ -19,39 +19,23 @@ const SliderCard = () => {
 	};
 	return (
 		<Slider {...settings} className="flex items-center">
-			<div className="card">
-				<img
-					className="object-cover w-full h-full"
-					src="https://source.unsplash.com/random/1"
-					alt=""
-				/>
-				<div className="card-content">
-					<h2 className="mb-2 text-xl font-semibold text-secondary">Spring 2020</h2>
-					<Button text={'Detail'} className="bg-transparent"></Button>
-				</div>
-			</div>
-			<div className="card">
-				<img
-					className="object-cover w-full h-full"
-					src="https://source.unsplash.com/random/2"
-					alt=""
-				/>
-				<div className="card-content">
-					<h2 className="mb-2 text-xl font-semibold text-secondary">Spring 2020</h2>
-					<Button text={'Detail'} className="bg-transparent"></Button>
-				</div>
-			</div>
-			<div className="card">
-				<img
-					className="object-cover w-full h-full"
-					src="https://source.unsplash.com/random"
-					alt=""
-				/>
-				<div className="card-content">
-					<h2 className="mb-2 text-xl font-semibold text-secondary">Spring 2020</h2>
-					<Button text={'Detail'} className="bg-transparent"></Button>
-				</div>
-			</div>
+			{products.map((product) => {
+				return (
+					<div className="card" key={product._id}>
+						<img className="object-cover w-full h-full" src={product.imgUrl} alt="" />
+						<div className="card-content">
+							<h2 className="mb-2 text-xl font-semibold text-secondary">Spring 2020</h2>
+							<Button
+								key={product._id}
+								text={'Detail'}
+								className="bg-transparent"
+								data-id={product._id}
+								onClick={handleClick}
+							></Button>
+						</div>
+					</div>
+				);
+			})}
 		</Slider>
 	);
 };

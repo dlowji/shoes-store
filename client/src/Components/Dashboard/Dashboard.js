@@ -92,7 +92,7 @@ const Dashboard = () => {
 						: 'flex items-center justify-between'
 				}`}
 			>
-				{!loading ? (
+				{!loading && products ? (
 					<>
 						{products.map((item, index) => {
 							return (
