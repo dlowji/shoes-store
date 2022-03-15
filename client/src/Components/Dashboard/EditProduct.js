@@ -8,7 +8,7 @@ import TextArea from '../Form/TextArea/TextArea';
 import './Product.css';
 import fetchProducts from '../Products/getProducts';
 
-const EditProduct = ({ setEditProduct, setProducts, product }) => {
+const EditProduct = ({ setEditProduct, setProducts, product, setToastMessage }) => {
 	const [selectedImage, setSelectedImage] = useState(product.imgUrl);
 	const scheme = yup
 		.object({
@@ -49,6 +49,11 @@ const EditProduct = ({ setEditProduct, setProducts, product }) => {
 			console.log(res);
 			if (res.status === 200) {
 				setEditProduct(false);
+				setToastMessage({
+					show: true,
+					title: 'success',
+					message: 'Product updated successfully',
+				});
 				fetchProducts().then((response) => {
 					setProducts(response.data);
 				});

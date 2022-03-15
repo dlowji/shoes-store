@@ -12,6 +12,8 @@ import Loading from '../Loading/Loading';
 import getProduct from '../Products/getProduct';
 import searchProducts from '../Admin/searchProducts';
 import { debounce } from 'lodash';
+import ToastMessage from '../Toast/ToastMessage';
+import Confirm from '../Toast/Confirm';
 
 const Dashboard = () => {
 	const { activeSidebar, setActiveSidebar } = useOutletContext();
@@ -20,6 +22,15 @@ const Dashboard = () => {
 	const [addProduct, setAddProduct] = React.useState(false);
 	const [loading, setLoading] = React.useState(false);
 	const [product, setProduct] = React.useState({});
+	const [toastMessage, setToastMessage] = React.useState({
+		show: false,
+		title: '',
+		message: '',
+	});
+	const [confirm, setConfirm] = React.useState({
+		show: false,
+		idDelete: '',
+	});
 	const handleAddProduct = () => {
 		setAddProduct(true);
 	};
@@ -34,11 +45,29 @@ const Dashboard = () => {
 		});
 	};
 	const handleDeleteProduct = (e) => {
-		const idProduct = e.target.dataset.id;
-		deleteProduct(idProduct).then((response) => {
+		setConfirm({
+			show: true,
+			idDelete: e.target.dataset.id,
+		});
+	};
+	const handleDelete = () => {
+		deleteProduct(confirm.idDelete).then((response) => {
 			if (response.data.deletedCount === 1) {
+				setConfirm({ show: false, isDeleted: '' });
+				setToastMessage({
+					show: true,
+					title: 'success',
+					message: 'Product deleted successfully',
+				});
 				fetchProducts().then((response) => {
 					setProducts(response.data);
+				});
+			} else {
+				setConfirm({ show: false, isDeleted: '' });
+				setToastMessage({
+					show: true,
+					title: 'error',
+					message: 'Product not deleted',
 				});
 			}
 		});
@@ -64,6 +93,17 @@ const Dashboard = () => {
 			setLoading(false);
 		});
 	}, []);
+	React.useEffect(() => {
+		if (toastMessage.show) {
+			setTimeout(() => {
+				setToastMessage({
+					show: false,
+					title: '',
+					message: '',
+				});
+			}, 3000);
+		}
+	}, [toastMessage.show]);
 	return (
 		<div
 			className={`mb-[30px] mr-0 ml-0 px-5 transition-all duration-500 ease-in-out md:mx-auto max-w-[1400px]`}
@@ -109,12 +149,14 @@ const Dashboard = () => {
 											className="mt-3 text-primary"
 											data-id={item._id}
 											onClick={handleEditProduct}
+											disabled={toastMessage.show}
 										></Button>
 										<Button
 											text="Delete product"
 											className="mt-3 text-primary"
 											data-id={item._id}
 											onClick={handleDeleteProduct}
+											disabled={toastMessage.show}
 										></Button>
 									</div>
 								</div>
@@ -132,11 +174,32 @@ const Dashboard = () => {
 				)}
 			</div>
 			<ModalBase visible={addProduct} onClose={() => setAddProduct(false)}>
-				<AddProduct setAddProduct={setAddProduct} setProducts={setProducts} />
+				<AddProduct
+					setAddProduct={setAddProduct}
+					setProducts={setProducts}
+					setToastMessage={setToastMessage}
+				/>
 			</ModalBase>
 			<ModalBase visible={editProduct} onClose={() => setEditProduct(false)}>
-				<EditProduct setEditProduct={setEditProduct} setProducts={setProducts} product={product} />
+				<EditProduct
+					setEditProduct={setEditProduct}
+					setProducts={setProducts}
+					product={product}
+					setToastMessage={setToastMessage}
+				/>
 			</ModalBase>
+			<Confirm
+				visible={confirm.show}
+				onClose={() => setConfirm({ show: false, idDelete: '' })}
+				handleDelete={handleDelete}
+			></Confirm>
+			{toastMessage?.show && (
+				<ToastMessage
+					mounted={toastMessage.show}
+					title={toastMessage.title}
+					message={toastMessage.message}
+				></ToastMessage>
+			)}
 		</div>
 	);
 };
