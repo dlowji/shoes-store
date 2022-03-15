@@ -20,7 +20,7 @@ const loginValidate = user => {
 
 const productValidate = product => {
     const schema = Joi.object({
-        nameProduct: Joi.string().min(8).max(32).required(),
+        nameProduct: Joi.string().min(8).required(),
         brandProduct: Joi.string().required(),
         priceProduct: Joi.number().required(),
         descriptionProduct: Joi.string().required(),

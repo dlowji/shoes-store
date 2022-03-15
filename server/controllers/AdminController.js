@@ -61,7 +61,6 @@ class AdminController {
 						price: parseInt(validData.priceProduct),
 						imgUrl: `/uploads/${req.file.filename}`,
 						brand: validData.brandProduct,
-						code: 'DLOWJ1',
 						desc: validData.descriptionProduct,
 						size: ['8.5US', '9US', '9.5US'],
 					};
@@ -98,7 +97,6 @@ class AdminController {
 						name: validData.nameProduct,
 						price: parseInt(validData.priceProduct),
 						brand: validData.brandProduct,
-						code: 'DLOWJ1',
 						desc: validData.descriptionProduct,
 						size: ['8.5US', '9US', '9.5US'],
 					};
@@ -130,7 +128,6 @@ class AdminController {
 						price: parseInt(validData.priceProduct),
 						imgUrl: `/uploads/${req.file.filename}`,
 						brand: validData.brandProduct,
-						code: 'DLOWJ1',
 						desc: validData.descriptionProduct,
 						size: ['8.5US', '9US', '9.5US'],
 					};
