@@ -18,6 +18,10 @@ const userSchema = new Schema({
         required: true,
         max: 50,
         min: 8
+    },
+    role: {
+        type: Number,
+        ref: "Role",
     }
 }, {
     timestamps: true

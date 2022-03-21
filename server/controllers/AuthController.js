@@ -1,5 +1,6 @@
 const { registerValidate, loginValidate } = require('../utils/helpers/validate');
 const { errorMessage, successMessage } = require('../utils/helpers/responseMessage');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
@@ -25,6 +26,7 @@ class AuthController {
             username: req.body.username,
             password: hashedPassword,
             email: req.body.email,
+            role: 1,
         })
 
         try {
@@ -49,8 +51,9 @@ class AuthController {
         const validPass = await bcrypt.compare(req.body.password, existAccount.password);
         if (!validPass) return errorMessage(res, 500, 'Wrong username or password');
 
-        res.json('Logged')
-
+        //Create and assign a token
+        const token = jwt.sign({_id: existAccount._id}, process.env.TOKEN_SECRET);
+        res.header('auth-token', token).send(token);
     }
 }
 

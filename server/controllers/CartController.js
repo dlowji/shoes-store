@@ -1,6 +1,6 @@
 const cartRepository = require('../utils/middleware/repository');
 const {errorMessage, successMessage} = require('../utils/helpers/responseMessage');
-const Shoe = require('../model/Shoe');
+const Shoe = require('../models/Shoe');
 
 class CartController {
     async addItemToCart(req, res) {
@@ -8,6 +8,7 @@ class CartController {
         const quantity = Number.parseInt(req.body.quantity);
         try {
             let cart = await cartRepository.cart();
+            console.log(cart)
             let productDetails = await Shoe.findById(productId);
             if (!productDetails) {
                 return errorMessage(res, 500, 'Invalid request');
@@ -85,6 +86,7 @@ class CartController {
     async getCart(req, res){
         try {
             let cart = await cartRepository.cart()
+            console.log(cart)
             if (!cart) {
                 return res.status(400).json({
                     type: "Invalid",

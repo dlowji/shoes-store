@@ -5,7 +5,7 @@ exports.cart = async () => {
         path: 'items.productId',
         select: 'name price total',
     });
-    return carts[0];
+    return carts;
 }
 
 exports.addItem = async payload => {

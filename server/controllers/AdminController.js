@@ -161,39 +161,7 @@ class AdminController {
 
 	//[POST] /admin/user/create
 	async createUser(req, res) {
-		// upload(req, res, async (err) => {
-		//     if(err) return errorMessage(res, 500, err);
-		//     else {
-		//         if (req.file == undefined) {
-		//             return errorMessage(res, 500, 'Error: No File Selected!');
-		//         }
-		//         else {
-		//             const validData = {
-		//                 nameProduct: req.body.nameProduct,
-		//                 brandProduct: req.body.brandProduct,
-		//                 priceProduct: req.body.priceProduct,
-		//                 descriptionProduct: req.body.descriptionProduct,
-		//             }
-		//             const { error } = productValidate(validData);
-		//             if (error) return errorMessage(res, 500, error.details[0].message);
-		//             const product = {
-		//                 name: validData.nameProduct,
-		//                 price: parseInt(validData.priceProduct),
-		//                 imgUrl: `/uploads/${req.file.filename}`,
-		//                 brand: validData.brandProduct,
-		//                 code: 'DLOWJ1',
-		//                 desc: validData.descriptionProduct,
-		//                 size: ['8.5US', '9US', '9.5US'],
-		//             };
-		//             try {
-		//                 const createdProduct = await Shoe.create(product);
-		//                 return successMessage(res, createdProduct, 'Add new product successfully');
-		//             } catch (error) {
-		//                 return errorMessage(res, 500, error.message);
-		//             }
-		//         }
-		//     }
-		// });
+		
 	}
 
 	//[PUT] /admin/user/update/:id
