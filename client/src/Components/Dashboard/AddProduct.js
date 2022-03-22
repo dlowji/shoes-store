@@ -20,6 +20,11 @@ const AddProduct = ({ setAddProduct, setProducts, setToastMessage }) => {
 				.min(8, 'Name must be at least 8 characters'),
 			brandProduct: yup.string().required('Brand is required'),
 			priceProduct: yup.number().typeError('Price must be a number').required('Price is required'),
+			starProduct: yup
+				.number()
+				.typeError('Star must be a number')
+				.oneOf([0, 1, 2, 3, 4, 5], 'Star must be in range 0 to 5')
+				.required('Star is required'),
 			descriptionProduct: yup.string().required('Description is required'),
 		})
 		.required();
@@ -33,6 +38,7 @@ const AddProduct = ({ setAddProduct, setProducts, setToastMessage }) => {
 			nameProduct: '',
 			brandProduct: '',
 			priceProduct: '',
+			starProduct: '',
 			descriptionProduct: '',
 			imageProduct: '',
 		},
@@ -44,6 +50,7 @@ const AddProduct = ({ setAddProduct, setProducts, setToastMessage }) => {
 		form.append('nameProduct', values.nameProduct);
 		form.append('brandProduct', values.brandProduct);
 		form.append('priceProduct', values.priceProduct);
+		form.append('starProduct', values.starProduct);
 		form.append('descriptionProduct', values.descriptionProduct);
 		form.append('imageProduct', selectedImage);
 		fetch('http://localhost:5555/admin/product/create', {
@@ -83,7 +90,7 @@ const AddProduct = ({ setAddProduct, setProducts, setToastMessage }) => {
 							type="text"
 							name="nameProduct"
 							id="nameProduct"
-							placeholder="Enter your user name"
+							placeholder="Enter the name"
 							control={control}
 						></Input>
 						<p className="text-[#E74C3C] text-sm font-bold h-5 relative -top-2">
@@ -96,7 +103,7 @@ const AddProduct = ({ setAddProduct, setProducts, setToastMessage }) => {
 							type="text"
 							name="brandProduct"
 							id="brandProduct"
-							placeholder="Enter your user name"
+							placeholder="Enter the brand"
 							control={control}
 						></Input>
 						<p className="text-[#E74C3C] text-sm font-bold h-5 relative -top-2">
@@ -117,11 +124,26 @@ const AddProduct = ({ setAddProduct, setProducts, setToastMessage }) => {
 						</p>
 					</div>
 					<div className="flex flex-col gap-2">
+						<label htmlFor="starProduct">Star</label>
+						<Input
+							type="number"
+							name="starProduct"
+							id="starProduct"
+							min="0"
+							max="5"
+							placeholder="Enter your user name"
+							control={control}
+						></Input>
+						<p className="text-[#E74C3C] text-sm font-bold h-5 relative -top-2">
+							{errors.starProduct ? errors.starProduct?.message : ''}
+						</p>
+					</div>
+					<div className="flex flex-col gap-2">
 						<label htmlFor="descriptionProduct">Description</label>
 						<TextArea
 							name="descriptionProduct"
 							id="descriptionProduct"
-							placeholder="Enter your message"
+							placeholder="Enter the description"
 							control={control}
 						></TextArea>
 						<p className="text-[#E74C3C] text-sm font-bold h-5 -top-2">

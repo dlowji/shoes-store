@@ -10,14 +10,16 @@ function App() {
 	const [activeSidebar, setActiveSidebar] = React.useState(true);
 	const navigate = useNavigate();
 	React.useEffect(() => {
-		if (user && admin) {
+		if (!user && !admin) {
 			navigate('dashboard');
+		} else {
+			navigate('/');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user, admin]);
 	return (
 		<>
-			{user && admin ? (
+			{!user && !admin ? (
 				<Sidebar
 					user={user}
 					setUser={setUser}
@@ -25,7 +27,7 @@ function App() {
 					setActiveSidebar={setActiveSidebar}
 				/>
 			) : (
-				<Navbar setUser={setUser} />
+				<Navbar user={user} setUser={setUser} />
 			)}
 			<ScrollToTop></ScrollToTop>
 			<Outlet context={{ activeSidebar, setActiveSidebar }}></Outlet>

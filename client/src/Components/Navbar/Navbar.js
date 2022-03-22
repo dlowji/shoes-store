@@ -5,7 +5,7 @@ import Modal from './Modal';
 import navbar from '../../config/navbarData';
 import './NavBar.css';
 
-const Navbar = ({ setUser }) => {
+const Navbar = ({ user, setUser }) => {
 	const [toggle, setToggle] = React.useState(false);
 	const [activeIndex, setActiveIndex] = React.useState(0);
 	const location = useLocation();
@@ -105,10 +105,13 @@ const Navbar = ({ setUser }) => {
 				<img src={logo} alt="logo" className="block object-cover md:hidden" />
 
 				<div className="flex items-center gap-x-[32px] px-5">
-					<Modal setUser={setUser}></Modal>
-					<div className="text-[#fff] cursor-pointer ">
-						<i className="fas fa-shopping-cart"></i>
-					</div>
+					<Modal user={user} setUser={setUser}></Modal>
+					<Link
+						to="/cart"
+						className="text-[#fff] cursor-pointer w-[30px] h-[30px] flex items-center justify-center"
+					>
+						<i className="text-xl fas fa-shopping-cart"></i>
+					</Link>
 				</div>
 			</div>
 		</header>

@@ -31,11 +31,18 @@ const ProductCard = () => {
 						</h3>
 						<div className="flex items-center mt-4">
 							<div className="flex gap-x-2 mr-2 text-[13px]">
-								<i className="fa fa-star text-primary"></i>
-								<i className="fa fa-star text-primary"></i>
-								<i className="fa fa-star text-primary"></i>
-								<i className="fa fa-star text-primary"></i>
-								<i className="fa fa-star"></i>
+								{product.star &&
+									Array(5)
+										.fill(0)
+										.map((_, i) => i + 1)
+										.map((item, index) => {
+											return (
+												<i
+													key={index}
+													className={`fa fa-star ${item <= product.star ? 'text-primary' : ''}`}
+												></i>
+											);
+										})}
 							</div>
 							<span className="pl-2 text-sm border-l-2 border-primary">
 								Brand: <strong>{product.brand ? product.brand : ''}</strong>
@@ -66,23 +73,24 @@ const ProductCard = () => {
 											})}
 									</select>
 								</div>
-								{/* <div className="flex items-center gap-4">
-								<label htmlFor="quantity">Quantity</label>
-								<input
-									type="number"
-									name="quantity"
-									id="quantity"
-									defaultValue={38}
-									min="38"
-									max="43"
-									className="px-2 py-1 border rounded-lg outline-none border-primary"
-								/>
-							</div> */}
+								<div className="flex items-center gap-4">
+									<label htmlFor="Quantity" className="font-bold">
+										Quantity
+									</label>
+									<input
+										name="Quantity"
+										id="Quantity"
+										type="number"
+										min="0"
+										defaultValue="0"
+										className="w-10 border rounded-lg outline-none border-primary"
+									></input>
+								</div>
 								<div className="flex items-center gap-4 ml-auto mr-auto md:mr-0">
-									<Button text={'add to cart'} className={'flex items-center'}>
-										<i className="fas fa-shopping-cart text-[14px] mr-2"></i>
+									<Button text={'add to cart'} className={'flex items-center text-primary'}>
+										<i className="fas fa-shopping-cart text-[14px] mr-2 text-primary"></i>
 									</Button>
-									<Button text={'Buy now'} className={''}></Button>
+									<Button text={'Buy now'} className={'text-primary'}></Button>
 								</div>
 							</form>
 						</div>

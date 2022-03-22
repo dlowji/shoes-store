@@ -15,6 +15,11 @@ const EditProduct = ({ setEditProduct, setProducts, product, setToastMessage }) 
 			nameProduct: yup.string().required('Name is required'),
 			brandProduct: yup.string().required('Brand is required'),
 			priceProduct: yup.number().typeError('Price must be a number').required('Price is required'),
+			starProduct: yup
+				.number()
+				.typeError('Star must be a number')
+				.oneOf([0, 1, 2, 3, 4, 5], 'Star must be in range 0 to 5')
+				.required('Star is required'),
 			descriptionProduct: yup.string().required('Description is required'),
 		})
 		.required();
@@ -27,16 +32,19 @@ const EditProduct = ({ setEditProduct, setProducts, product, setToastMessage }) 
 			nameProduct: product.name,
 			brandProduct: product.brand,
 			priceProduct: product.price,
+			starProduct: product.star,
 			descriptionProduct: product.desc,
 		},
 		resolver: yupResolver(scheme),
 	});
 
 	const onSubmitHandler = (values) => {
+		console.log(values);
 		let form = new FormData();
 		form.append('nameProduct', values.nameProduct);
 		form.append('brandProduct', values.brandProduct);
 		form.append('priceProduct', values.priceProduct);
+		form.append('starProduct', values.starProduct);
 		form.append('descriptionProduct', values.descriptionProduct);
 		if (selectedImage !== product.imgUrl) {
 			form.append('imageProduct', selectedImage);
@@ -70,7 +78,7 @@ const EditProduct = ({ setEditProduct, setProducts, product, setToastMessage }) 
 						type="text"
 						name="nameProduct"
 						id="nameProduct"
-						placeholder="Enter your user name"
+						placeholder="Enter the name"
 						control={control}
 					></Input>
 					<p className="text-[#E74C3C] text-sm font-bold h-5 relative -top-2">
@@ -83,7 +91,7 @@ const EditProduct = ({ setEditProduct, setProducts, product, setToastMessage }) 
 						type="text"
 						name="brandProduct"
 						id="brandProduct"
-						placeholder="Enter your user name"
+						placeholder="Enter the brand"
 						control={control}
 					></Input>
 					<p className="text-[#E74C3C] text-sm font-bold h-5 relative -top-2">
@@ -96,7 +104,7 @@ const EditProduct = ({ setEditProduct, setProducts, product, setToastMessage }) 
 						type="text"
 						name="priceProduct"
 						id="priceProduct"
-						placeholder="Enter your user name"
+						placeholder="Enter the price"
 						control={control}
 					></Input>
 					<p className="text-[#E74C3C] text-sm font-bold h-5 relative -top-2">
@@ -104,11 +112,24 @@ const EditProduct = ({ setEditProduct, setProducts, product, setToastMessage }) 
 					</p>
 				</div>
 				<div className="flex flex-col gap-2">
+					<label htmlFor="priceProduct">Star</label>
+					<Input
+						type="number"
+						name="starProduct"
+						id="starProduct"
+						placeholder="Enter the star"
+						control={control}
+					></Input>
+					<p className="text-[#E74C3C] text-sm font-bold h-5 relative -top-2">
+						{errors.starProduct ? errors.starProduct?.message : ''}
+					</p>
+				</div>
+				<div className="flex flex-col gap-2">
 					<label htmlFor="descriptionProduct">Description</label>
 					<TextArea
 						name="descriptionProduct"
 						id="descriptionProduct"
-						placeholder="Enter your message"
+						placeholder="Enter the description"
 						defaultValue={product.desc}
 						control={control}
 					></TextArea>

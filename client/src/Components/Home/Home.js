@@ -13,6 +13,7 @@ const Home = () => {
 	React.useEffect(() => {
 		setLoading(true);
 		getProductsLimit(10).then((response) => {
+			console.log(response);
 			if (response.data && response.data.length > 0) {
 				setProducts(response.data);
 				setLoading(false);

@@ -9,6 +9,7 @@ import Home from './Components/Home/Home';
 import NotFound from './Components/NotFound/NotFound';
 import ProductCard from './Components/ProductCard/ProductCard';
 import Dashboard from './Components/Dashboard/Dashboard';
+import Cart from './Components/Cart/Cart';
 
 ReactDOM.render(
 	<BrowserRouter>
@@ -20,6 +21,7 @@ ReactDOM.render(
 				</Route>
 				<Route path="contact" element={<Contact />} />
 				<Route path="dashboard" element={<Dashboard />} />
+				<Route path="cart" element={<Cart />} />
 				<Route path="*" element={<NotFound />} />
 			</Route>
 		</Routes>

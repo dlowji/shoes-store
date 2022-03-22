@@ -9,6 +9,7 @@ import Loading from '../Loading/Loading';
 const Products = () => {
 	const [products, setProducts] = React.useState([]);
 	const [loading, setLoading] = React.useState(false);
+	const [cart, setCart] = React.useState([]);
 	const params = useParams().productId;
 	React.useEffect(() => {
 		setLoading(true);
@@ -34,6 +35,7 @@ const Products = () => {
 								imgUrl={product.imgUrl}
 								brand={product.brand}
 								size={product.size}
+								star={product.star}
 							></Product>
 						);
 					})}

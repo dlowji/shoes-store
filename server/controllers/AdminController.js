@@ -50,6 +50,7 @@ class AdminController {
 						nameProduct: req.body.nameProduct,
 						brandProduct: req.body.brandProduct,
 						priceProduct: req.body.priceProduct,
+						starProduct: req.body.starProduct,
 						descriptionProduct: req.body.descriptionProduct,
 					};
 
@@ -61,6 +62,7 @@ class AdminController {
 						price: parseInt(validData.priceProduct),
 						imgUrl: `/uploads/${req.file.filename}`,
 						brand: validData.brandProduct,
+						star: validData.starProduct,
 						desc: validData.descriptionProduct,
 						size: ['8.5US', '9US', '9.5US'],
 					};
@@ -86,6 +88,7 @@ class AdminController {
 						nameProduct: req.body.nameProduct,
 						brandProduct: req.body.brandProduct,
 						priceProduct: req.body.priceProduct,
+						starProduct: req.body.starProduct,
 						descriptionProduct: req.body.descriptionProduct,
 					};
 
@@ -97,6 +100,7 @@ class AdminController {
 						name: validData.nameProduct,
 						price: parseInt(validData.priceProduct),
 						brand: validData.brandProduct,
+						star: parseInt(validData.starProduct),
 						desc: validData.descriptionProduct,
 						size: ['8.5US', '9US', '9.5US'],
 					};
@@ -116,6 +120,7 @@ class AdminController {
 						nameProduct: req.body.nameProduct,
 						brandProduct: req.body.brandProduct,
 						priceProduct: req.body.priceProduct,
+						starProduct: req.body.starProduct,
 						descriptionProduct: req.body.descriptionProduct,
 					};
 
@@ -128,6 +133,7 @@ class AdminController {
 						price: parseInt(validData.priceProduct),
 						imgUrl: `/uploads/${req.file.filename}`,
 						brand: validData.brandProduct,
+						star: parseInt(validData.starProduct),
 						desc: validData.descriptionProduct,
 						size: ['8.5US', '9US', '9.5US'],
 					};
@@ -160,9 +166,7 @@ class AdminController {
 	}
 
 	//[POST] /admin/user/create
-	async createUser(req, res) {
-		
-	}
+	async createUser(req, res) {}
 
 	//[PUT] /admin/user/update/:id
 	async updateUser(req, res) {

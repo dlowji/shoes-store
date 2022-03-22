@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../Button/Button';
 
-const Product = ({ id, name, price, imgUrl, brand, size }) => {
+const Product = ({ id, name, price, imgUrl, brand, size, star }) => {
 	const navigate = useNavigate();
 	const handleClick = () => {
 		console.log(id);
@@ -19,16 +19,32 @@ const Product = ({ id, name, price, imgUrl, brand, size }) => {
 				<h3 className="font-medium text-[16px] lg:text-[20px] leading-5 mb-2 text-truncate">
 					{name}
 				</h3>
-				<div className="flex flex-col mt-auto">
+				<div className="flex flex-col gap-1 mt-auto">
 					<span className="text-sm">
 						Size: <strong className="uppercase">{size[0]}</strong>
 					</span>
 					<span className="ml-auto text-lg lg:text-xl">
 						<strong>{price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</strong>
 					</span>
-					<span className="text-sm">
-						Brand: <strong>{brand}</strong>
-					</span>
+					<div className="flex items-center text-sm">
+						<span className="flex gap-2">
+							Brand: <strong>{brand}</strong>
+						</span>
+						<div className="flex gap-x-2 ml-auto text-[13px]">
+							{star &&
+								Array(5)
+									.fill(0)
+									.map((_, i) => i + 1)
+									.map((item, index) => {
+										return (
+											<i
+												key={index}
+												className={`fa fa-star ${item <= star ? 'text-primary' : ''}`}
+											></i>
+										);
+									})}
+						</div>
+					</div>
 				</div>
 				<div className="flex mt-2">
 					<Button text={'add to cart'} className={'lg:ml-auto flex items-center text-primary'}>
