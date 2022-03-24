@@ -2,11 +2,12 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../Button/Button';
 
-const Product = ({ id, name, price, imgUrl, brand, size, star }) => {
+const Product = ({ product, handleAddToCart }) => {
+	const { _id, name, price, imgUrl, brand, size, star, quantity } = product;
 	const navigate = useNavigate();
 	const handleClick = () => {
-		console.log(id);
-		navigate(`${id}`);
+		console.log(_id);
+		navigate(`${_id}`);
 	};
 	return (
 		<div className="flex flex-col shadow-xl rounded-xl">
@@ -47,7 +48,12 @@ const Product = ({ id, name, price, imgUrl, brand, size, star }) => {
 					</div>
 				</div>
 				<div className="flex mt-2">
-					<Button text={'add to cart'} className={'lg:ml-auto flex items-center text-primary'}>
+					<Button
+						text={'add to cart'}
+						className={'lg:ml-auto flex items-center text-primary'}
+						onClick={handleAddToCart}
+						data-id={_id}
+					>
 						<i className="fas fa-shopping-cart text-[14px] mr-2"></i>
 					</Button>
 					<button

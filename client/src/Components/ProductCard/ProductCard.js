@@ -3,21 +3,77 @@ import Button from '../Button/Button';
 import { useParams } from 'react-router-dom';
 import Loading from '../Loading/Loading';
 import getProduct from '../Products/getProduct';
-const ProductCard = () => {
+const ProductCard = ({ cart, setCart }) => {
 	const [product, setProduct] = React.useState({});
 	const [loading, setLoading] = React.useState(false);
 	const idFind = useParams().productId;
 	React.useEffect(() => {
+		let mounted = true;
 		setLoading(true);
-		getProduct(idFind).then((response) => {
-			if (response.data) {
-				setProduct(response.data);
-				setLoading(false);
-			}
-		});
+		getProduct(idFind)
+			.then((response) => {
+				if (response.data && mounted) {
+					setProduct(response.data);
+					setLoading(false);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		return () => {
+			mounted = false;
+		};
 	}, [idFind]);
+	React.useEffect(() => {
+		const user = JSON.parse(localStorage.getItem('user'));
+		if (user && cart && cart.length > 0) {
+			localStorage.setItem('user', JSON.stringify({ ...user, cart }));
+		}
+	}, [cart]);
+	const handleAddToCart = (e) => {
+		e.preventDefault();
+		const sizeBuy = e.target.querySelector('select').value;
+		const quantityBuy = parseInt(e.target.querySelector('input[type="number"]').value);
+		if (sizeBuy && quantityBuy && quantityBuy > 0) {
+			const sameSize = cart.find((item) => item._id === product._id && item.sizeBuy === sizeBuy);
+			const totalQuantity = cart
+				.filter((item) => {
+					return item._id === product._id;
+				})
+				.reduce((total, item) => {
+					return total + item.quantityBuy;
+				}, 0);
+			if (cart && cart.length > 0 && sameSize) {
+				const newCart = cart.map((item) => {
+					if (
+						item._id === product._id &&
+						totalQuantity + quantityBuy <= product.quantity &&
+						item.sizeBuy === sizeBuy
+					) {
+						item.quantityBuy += quantityBuy;
+					}
+					return item;
+				});
+				setCart(newCart);
+			} else {
+				// khac size
+				const notSameSize = cart.find(
+					(item) => item._id === product._id && item.sizeBuy !== sizeBuy
+				);
+				if (cart && cart.length > 0 && notSameSize) {
+					if (totalQuantity + quantityBuy <= product.quantity) {
+						setCart([...cart, { ...product, sizeBuy, quantityBuy }]);
+					}
+				}
+				// chua co cart
+				else {
+					setCart([...cart, { ...product, sizeBuy, quantityBuy }]);
+				}
+			}
+		}
+	};
 	return (
-		<div className="container">
+		<div className="container min-h-[100vh]">
 			{!loading ? (
 				<section className="flex flex-col justify-between gap-3 md:flex-row">
 					<img
@@ -53,7 +109,7 @@ const ProductCard = () => {
 							<p className="text-base font-normal leading-5">{product.desc ? product.desc : ''}</p>
 						</div>
 						<div className="mt-4">
-							<form className="flex flex-col gap-y-5">
+							<form className="flex flex-col gap-y-5" onSubmit={handleAddToCart}>
 								<div className="flex items-center gap-4">
 									<label htmlFor="size" className="font-bold">
 										Size
@@ -82,15 +138,20 @@ const ProductCard = () => {
 										id="Quantity"
 										type="number"
 										min="0"
+										max={product.quantity ? product.quantity : 0}
 										defaultValue="0"
-										className="w-10 border rounded-lg outline-none border-primary"
+										className="w-10 text-center border rounded-lg outline-none border-primary"
 									></input>
 								</div>
 								<div className="flex items-center gap-4 ml-auto mr-auto md:mr-0">
-									<Button text={'add to cart'} className={'flex items-center text-primary'}>
-										<i className="fas fa-shopping-cart text-[14px] mr-2 text-primary"></i>
+									<Button
+										text={'add to cart'}
+										type="submit"
+										className={'flex items-center text-primary btn-cart'}
+									>
+										<i className="fas fa-shopping-cart text-[14px] mr-2 text-[currentColor] btn-buy"></i>
 									</Button>
-									<Button text={'Buy now'} className={'text-primary'}></Button>
+									<Button type="button" text={'Buy now'} className={'text-primary'}></Button>
 								</div>
 							</form>
 						</div>

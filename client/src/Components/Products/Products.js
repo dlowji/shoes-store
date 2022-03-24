@@ -9,33 +9,95 @@ import Loading from '../Loading/Loading';
 const Products = () => {
 	const [products, setProducts] = React.useState([]);
 	const [loading, setLoading] = React.useState(false);
-	const [cart, setCart] = React.useState([]);
+	const [cart, setCart] = React.useState(
+		localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).cart
+			? JSON.parse(localStorage.getItem('user')).cart
+			: []
+	);
 	const params = useParams().productId;
 	React.useEffect(() => {
+		let mounted = true;
 		setLoading(true);
-		fetchProducts().then((response) => {
-			console.log(response);
-			setProducts(response.data);
-			setLoading(false);
-		});
+		fetchProducts()
+			.then((response) => {
+				if (mounted) {
+					console.log(response);
+					setProducts(response.data);
+					setLoading(false);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		return () => {
+			mounted = false;
+		};
 	}, []);
+	React.useEffect(() => {
+		const user = JSON.parse(localStorage.getItem('user'));
+		if (user && cart && cart.length > 0) {
+			localStorage.setItem('user', JSON.stringify({ ...user, cart }));
+		}
+	}, [cart]);
+	const handleAddToCart = (e) => {
+		const idProduct = e.target.getAttribute('data-id');
+		const product = products.find((item) => item._id === idProduct);
+		if (idProduct && product) {
+			const sameSize = cart.find(
+				(item) => item._id === product._id && item.sizeBuy === product.size[0]
+			);
+			const totalQuantity = cart
+				.filter((item) => {
+					return item._id === product._id;
+				})
+				.reduce((total, item) => {
+					return total + item.quantityBuy;
+				}, 0);
+			if (cart && cart.length > 0 && sameSize) {
+				const newCart = cart.map((item) => {
+					if (
+						item._id === product._id &&
+						totalQuantity + 1 <= product.quantity &&
+						item.sizeBuy === product.size[0]
+					) {
+						item.quantityBuy += 1;
+					}
+					return item;
+				});
+				setCart(newCart);
+			} else {
+				// khac size
+				const notSameSize = cart.find(
+					(item) => item._id === product._id && item.sizeBuy !== product.size[0]
+				);
+				if (cart && cart.length > 0 && notSameSize) {
+					if (totalQuantity + 1 <= product.quantity) {
+						setCart([
+							...cart,
+							{ ...product, sizeBuy: product.size[0], quantityBuy: totalQuantity + 1 },
+						]);
+					}
+				}
+				// chua co cart
+				else {
+					setCart([...cart, { ...product, sizeBuy: product.size[0], quantityBuy: 1 }]);
+				}
+			}
+		}
+	};
 	return (
 		<div className="container">
 			{params ? (
-				<ProductCard></ProductCard>
+				<ProductCard cart={cart} setCart={setCart}></ProductCard>
 			) : !loading ? (
 				<section className="grid grid-cols-1 gap-5 md:grid-cols-3">
 					{products.map((product, index) => {
 						return (
 							<Product
 								key={index}
-								id={product._id}
-								name={product.name}
-								price={product.price}
-								imgUrl={product.imgUrl}
-								brand={product.brand}
-								size={product.size}
-								star={product.star}
+								product={product}
+								handleAddToCart={handleAddToCart}
+								cart={cart}
 							></Product>
 						);
 					})}
