@@ -26,7 +26,7 @@ class AuthController {
             username: req.body.username,
             password: hashedPassword,
             email: req.body.email,
-            role: 1,
+            role: "Admin",
         })
 
         try {
@@ -53,7 +53,11 @@ class AuthController {
 
         //Create and assign a token
         const token = jwt.sign({_id: existAccount._id}, process.env.TOKEN_SECRET);
-        res.header('auth-token', token).send(token);
+        res.header('auth-token', token).json({
+            code: 0,
+            data: existAccount,
+            message: 'Login successfully'
+        });
     }
 }
 
