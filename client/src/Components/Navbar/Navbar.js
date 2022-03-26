@@ -102,9 +102,9 @@ const Navbar = ({ user, setUser }) => {
 					</div>
 				</div>
 
-				<img src={logo} alt="logo" className="block object-cover md:hidden" />
+				{/* <img src={logo} alt="logo" className="block object-cover md:hidden" /> */}
 
-				<div className="flex items-center gap-x-[32px] px-5">
+				<div className="flex items-center gap-x-[32px]">
 					<Modal user={user} setUser={setUser}></Modal>
 					<Link
 						to="/cart"

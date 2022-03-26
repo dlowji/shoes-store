@@ -30,6 +30,10 @@ const SignUpForm = ({ mounted, setMounted, setSignIn }) => {
 				.string()
 				.required('Password is required')
 				.min(8, 'Password must be at least 8 characters'),
+			passwordSignUpConfirm: yup
+				.string()
+				.required('Password confirmation is required')
+				.oneOf([yup.ref('passwordSignUp'), null], 'Passwords must match'),
 		})
 		.required();
 	const {
@@ -41,6 +45,7 @@ const SignUpForm = ({ mounted, setMounted, setSignIn }) => {
 			userNameSignup: 'anhlaprodn0123',
 			emailSignUp: 'anhlaprodn0123@gmail.com',
 			passwordSignUp: 'anhlaprodn0123',
+			passwordSignUpConfirm: 'anhlaprodn0123',
 		},
 		resolver: yupResolver(scheme),
 	});
@@ -62,14 +67,32 @@ const SignUpForm = ({ mounted, setMounted, setSignIn }) => {
 	};
 	// Handle submit
 	const onSubmitHandler = (values) => {
-		console.log({ ...user, ...values });
+		const { userNameSignup, emailSignUp, passwordSignUp } = values;
+		console.log({ username: userNameSignup, email: emailSignUp, password: passwordSignUp });
+		fetch('http://localhost:5555/auth/register', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				username: userNameSignup,
+				password: passwordSignUp,
+				email: emailSignUp,
+			}),
+		})
+			.then((response) => {
+				return response.json();
+			})
+			.then((response) => {
+				console.log(response);
+			});
 	};
 	return (
 		<>
 			{user.loading ? (
 				<Loading></Loading>
 			) : (
-				<div className="flex flex-col justify-center px-3 py-5 bg-secondary rounded-xl">
+				<div className="flex flex-col justify-center px-3 py-5 mx-2 bg-secondary rounded-xl">
 					<h2 className="mb-3 text-2xl font-bold text-center uppercase text-third">Register</h2>
 					<form autoComplete="off" onSubmit={handleSubmit(onSubmitHandler)}>
 						<div className="flex flex-col gap-2">
@@ -105,6 +128,7 @@ const SignUpForm = ({ mounted, setMounted, setSignIn }) => {
 								name="passwordSignUp"
 								id="passwordSignUp"
 								placeholder="Enter your password"
+								autoComplete="off"
 								control={control}
 							></Input>
 							<i
@@ -115,6 +139,26 @@ const SignUpForm = ({ mounted, setMounted, setSignIn }) => {
 							></i>
 							<p className="text-[#E74C3C] text-base font-bold h-5 relative -top-2">
 								{errors.passwordSignUp ? errors.passwordSignUp?.message : ''}
+							</p>
+						</div>
+						<div className="relative flex flex-col gap-2 my-2">
+							<label htmlFor="passwordSignUpConfirm">Confirm Password</label>
+							<Input
+								type={`${showPassword ? 'text' : 'password'}`}
+								name="passwordSignUpConfirm"
+								id="passwordSignUpConfirm"
+								placeholder="Enter your password"
+								autoComplete="off"
+								control={control}
+							></Input>
+							{/* <i
+								className={`fa fa-eye absolute top-[calc(50%-10px)] right-6 -translate-y-1/2sssssss cursor-pointer hover:text-primary transition-colors ${
+									showPassword ? 'text-primary' : ''
+								}`}
+								onClick={() => setShowPassword(!showPassword)}
+							></i> */}
+							<p className="text-[#E74C3C] text-base font-bold h-5 relative -top-2">
+								{errors.passwordSignUpConfirm ? errors.passwordSignUpConfirm?.message : ''}
 							</p>
 						</div>
 						<Button

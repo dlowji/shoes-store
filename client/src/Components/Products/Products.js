@@ -123,7 +123,7 @@ const Products = () => {
 					setCart={setCart}
 				></ProductCard>
 			) : !loading ? (
-				<section className="grid grid-cols-1 gap-5 md:grid-cols-3">
+				<section className="grid grid-cols-1 gap-2 md:gap-3 lg:gap-5 md:grid-cols-3">
 					{products.map((product, index) => {
 						return (
 							<Product
