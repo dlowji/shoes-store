@@ -3,9 +3,10 @@ import Button from '../Button/Button';
 import { useParams } from 'react-router-dom';
 import Loading from '../Loading/Loading';
 import getProduct from '../Products/getProduct';
-const ProductCard = ({ cart, setCart }) => {
+const ProductCard = ({ toastMessage, setToastMessage, cart, setCart }) => {
 	const [product, setProduct] = React.useState({});
 	const [loading, setLoading] = React.useState(false);
+
 	const idFind = useParams().productId;
 	React.useEffect(() => {
 		let mounted = true;
@@ -30,6 +31,17 @@ const ProductCard = ({ cart, setCart }) => {
 			localStorage.setItem('user', JSON.stringify({ ...user, cart }));
 		}
 	}, [cart]);
+	React.useEffect(() => {
+		if (toastMessage.show) {
+			setTimeout(() => {
+				setToastMessage({
+					show: false,
+					title: '',
+					message: '',
+				});
+			}, 3000);
+		}
+	}, [toastMessage.show]);
 	const handleAddToCart = (e) => {
 		e.preventDefault();
 		const sizeBuy = e.target.querySelector('select').value;
@@ -70,6 +82,19 @@ const ProductCard = ({ cart, setCart }) => {
 					setCart([...cart, { ...product, sizeBuy, quantityBuy }]);
 				}
 			}
+			setToastMessage({
+				show: true,
+				title: 'success',
+				message: `${product.name} has been added to cart`,
+			});
+			e.target.querySelector('select').value = '8.5US';
+			e.target.querySelector('input[type="number"]').value = 0;
+		} else {
+			setToastMessage({
+				show: true,
+				title: 'error',
+				message: 'Add to cart failed',
+			});
 		}
 	};
 	return (

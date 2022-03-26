@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import ProductCard from '../ProductCard/ProductCard';
 import fetchProducts from './getProducts';
 import Loading from '../Loading/Loading';
+import ToastMessage from '../Toast/ToastMessage';
 
 const Products = () => {
 	const [products, setProducts] = React.useState([]);
@@ -14,6 +15,11 @@ const Products = () => {
 			? JSON.parse(localStorage.getItem('user')).cart
 			: []
 	);
+	const [toastMessage, setToastMessage] = React.useState({
+		show: false,
+		title: '',
+		message: '',
+	});
 	const params = useParams().productId;
 	React.useEffect(() => {
 		let mounted = true;
@@ -39,6 +45,17 @@ const Products = () => {
 			localStorage.setItem('user', JSON.stringify({ ...user, cart }));
 		}
 	}, [cart]);
+	React.useEffect(() => {
+		if (toastMessage.show) {
+			setTimeout(() => {
+				setToastMessage({
+					show: false,
+					title: '',
+					message: '',
+				});
+			}, 3000);
+		}
+	}, [toastMessage.show]);
 	const handleAddToCart = (e) => {
 		const idProduct = e.target.getAttribute('data-id');
 		const product = products.find((item) => item._id === idProduct);
@@ -83,12 +100,28 @@ const Products = () => {
 					setCart([...cart, { ...product, sizeBuy: product.size[0], quantityBuy: 1 }]);
 				}
 			}
+			setToastMessage({
+				show: true,
+				title: 'success',
+				message: 'Product add to cart successfully',
+			});
+		} else {
+			setToastMessage({
+				show: true,
+				title: 'error',
+				message: 'Product not found',
+			});
 		}
 	};
 	return (
 		<div className="container">
 			{params ? (
-				<ProductCard cart={cart} setCart={setCart}></ProductCard>
+				<ProductCard
+					toastMessage={toastMessage}
+					setToastMessage={setToastMessage}
+					cart={cart}
+					setCart={setCart}
+				></ProductCard>
 			) : !loading ? (
 				<section className="grid grid-cols-1 gap-5 md:grid-cols-3">
 					{products.map((product, index) => {
@@ -104,6 +137,13 @@ const Products = () => {
 				</section>
 			) : (
 				<Loading />
+			)}
+			{toastMessage?.show && (
+				<ToastMessage
+					mounted={toastMessage.show}
+					title={toastMessage.title}
+					message={toastMessage.message}
+				></ToastMessage>
 			)}
 		</div>
 	);
