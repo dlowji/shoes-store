@@ -9,6 +9,7 @@ const Product = ({ product, handleAddToCart }) => {
 		console.log(_id);
 		navigate(`${_id}`);
 	};
+
 	return (
 		<div className="flex flex-col shadow-xl rounded-xl">
 			<img
@@ -21,13 +22,15 @@ const Product = ({ product, handleAddToCart }) => {
 					{name}
 				</h3>
 				<div className="flex flex-col gap-1 mt-auto">
-					<span className="text-sm">
+					<span className="flex gap-2 text-md">
 						Size: <strong className="uppercase">{size[0]}</strong>
+						Quantity: <strong className="uppercase">{quantity}</strong>
 					</span>
+
 					<span className="ml-auto text-lg lg:text-xl">
 						<strong>{price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</strong>
 					</span>
-					<div className="flex items-center text-sm">
+					<div className="flex items-center text-md">
 						<span className="flex gap-2">
 							Brand: <strong>{brand}</strong>
 						</span>

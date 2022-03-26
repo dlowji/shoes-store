@@ -1,5 +1,7 @@
 import React from 'react';
 import Button from '../Button/Button';
+import Confirm from '../Toast/Confirm';
+import ToastMessage from '../Toast/ToastMessage';
 
 const Cart = () => {
 	const [cart, setCart] = React.useState(
@@ -7,27 +9,63 @@ const Cart = () => {
 			? JSON.parse(localStorage.getItem('user')).cart
 			: []
 	);
+	const [toastMessage, setToastMessage] = React.useState({
+		show: false,
+		title: '',
+		message: '',
+	});
+	const [confirm, setConfirm] = React.useState({
+		show: false,
+		idDelete: '',
+		sizeDelete: '',
+	});
 	React.useEffect(() => {
 		const user = JSON.parse(localStorage.getItem('user'));
 		if (user && cart && cart.length > 0) {
 			localStorage.setItem('user', JSON.stringify({ ...user, cart }));
 		}
+		setConfirm({
+			show: false,
+			idDelete: '',
+			sizeDelete: '',
+		});
 	}, [cart]);
+	React.useEffect(() => {
+		if (toastMessage.show) {
+			setTimeout(() => {
+				setToastMessage({
+					show: false,
+					title: '',
+					message: '',
+				});
+			}, 3000);
+		}
+	}, [toastMessage.show]);
 	const handleBuy = () => {
 		console.log(cart);
 	};
-	const handleRemoveItem = (e) => {
-		const idProduct = e.target.getAttribute('data-id');
-		const sizeBuy = e.target.getAttribute('data-sizebuy');
+	const handleDelete = () => {
 		const newCart = cart.filter((item) => {
-			if (item._id === idProduct) {
-				if (item.sizeBuy === sizeBuy) {
+			if (item._id === confirm.idDelete) {
+				if (item.sizeBuy === confirm.sizeDelete) {
 					return false;
 				}
 			}
 			return true;
 		});
 		setCart(newCart);
+		setToastMessage({
+			show: true,
+			title: 'success',
+			message: 'Delete product success',
+		});
+	};
+	const handleRemoveItem = (e) => {
+		setConfirm({
+			show: true,
+			idDelete: e.target.getAttribute('data-id'),
+			sizeDelete: e.target.getAttribute('data-sizebuy'),
+		});
 	};
 	return (
 		<div className="container min-h-[100vh] flex flex-col gap-3">
@@ -151,6 +189,18 @@ const Cart = () => {
 				></Button>
 			) : (
 				''
+			)}
+			<Confirm
+				visible={confirm.show}
+				onClose={() => setConfirm({ show: false, idDelete: '', sizeDelete: '' })}
+				handleDelete={handleDelete}
+			></Confirm>
+			{toastMessage?.show && (
+				<ToastMessage
+					mounted={toastMessage.show}
+					title={toastMessage.title}
+					message={toastMessage.message}
+				></ToastMessage>
 			)}
 		</div>
 	);
