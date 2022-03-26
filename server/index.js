@@ -25,7 +25,7 @@ if (process.env.NODE_ENV === 'development') {
 
 //JSON Body
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.json({ limit: '50mb' }));
 
 const PORT = process.env.PORT || 3333;
 

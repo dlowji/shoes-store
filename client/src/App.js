@@ -6,20 +6,19 @@ import Sidebar from './Components/Admin/Sidebar';
 import ScrollToTop from './Components/Dashboard/ScrollToTop';
 function App() {
 	const [user, setUser] = React.useState(JSON.parse(localStorage.getItem('user')));
-	const [admin, setAdmin] = React.useState(true);
 	const [activeSidebar, setActiveSidebar] = React.useState(true);
 	const navigate = useNavigate();
 	React.useEffect(() => {
-		if (!user && !admin) {
+		if (user && user?.role === 'Admin') {
 			navigate('dashboard');
 		} else {
 			navigate('/');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [user, admin]);
+	}, [user]);
 	return (
 		<>
-			{!user && !admin ? (
+			{user && user?.role === 'Admin' ? (
 				<Sidebar
 					user={user}
 					setUser={setUser}

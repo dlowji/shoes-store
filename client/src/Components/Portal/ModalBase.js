@@ -9,7 +9,7 @@ const ModalBase = ({ visible, onClose, children }) => {
 				<Portal
 					visible={status !== 'exited'}
 					onClose={onClose}
-					containerClassName="flex lg:pt-0 sm:pt-[100px] items-center sm:items-stretch lg:items-center justify-center"
+					containerClassName="flex xl:pt-0 sm:pt-[100px] items-center sm:items-stretch xl:items-center justify-center"
 					bodyClassName="max-w-[500px] w-full"
 					bodyStyle={{ transition: 'all 0.3s ease-in-out 0s' }}
 				>

@@ -81,6 +81,7 @@ const Modal = ({ user, setUser }) => {
 			</ModalBase>
 			<ModalBase visible={showSignUp} onClose={() => setShowSignUp(false)}>
 				<SignUpForm
+					setUser={setUser}
 					mounted={showSignUp}
 					setMounted={setShowSignUp}
 					setSignIn={setShowSignIn}

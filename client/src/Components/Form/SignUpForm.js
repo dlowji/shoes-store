@@ -7,14 +7,9 @@ import './form.css';
 import Input from './Input/Input';
 import Loading from '../Loading/Loading';
 
-const SignUpForm = ({ mounted, setMounted, setSignIn }) => {
+const SignUpForm = ({ setUser, mounted, setMounted, setSignIn }) => {
 	const [showPassword, setShowPassword] = React.useState(false);
-	const [user, setUser] = React.useState({
-		loading: false,
-		userNameSignup: '',
-		emailSignUp: '',
-		passwordSignUp: '',
-	});
+	const [loading, setLoading] = React.useState(false);
 	const scheme = yup
 		.object({
 			userNameSignup: yup
@@ -39,6 +34,7 @@ const SignUpForm = ({ mounted, setMounted, setSignIn }) => {
 	const {
 		handleSubmit,
 		control,
+		setError,
 		formState: { errors },
 	} = useForm({
 		defaultValues: {
@@ -61,6 +57,7 @@ const SignUpForm = ({ mounted, setMounted, setSignIn }) => {
 			document.removeEventListener('click', handleClick);
 		};
 	});
+	console.log(errors);
 	const handleSignIn = () => {
 		setMounted(false);
 		setSignIn(true);
@@ -83,13 +80,29 @@ const SignUpForm = ({ mounted, setMounted, setSignIn }) => {
 			.then((response) => {
 				return response.json();
 			})
-			.then((response) => {
-				console.log(response);
+			.then((data) => {
+				console.log(data);
+				if (data.code !== 0) {
+					if (data.error === 'username') {
+						setError('userNameSignup', {
+							type: 'manual',
+							message: data.message,
+						});
+					} else if (data.error === 'email') {
+						setError('emailSignUp', {
+							type: 'manual',
+							message: data.message,
+						});
+					}
+				} else {
+					setUser(data.data);
+					localStorage.setItem('user', JSON.stringify(data.data));
+				}
 			});
 	};
 	return (
 		<>
-			{user.loading ? (
+			{loading ? (
 				<Loading></Loading>
 			) : (
 				<div className="flex flex-col justify-center px-3 py-5 mx-2 bg-secondary rounded-xl">

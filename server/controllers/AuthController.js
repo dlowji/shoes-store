@@ -8,24 +8,29 @@ class AuthController {
 	async register(req, res) {
 		//VALIDATE
 		const { error } = registerValidate(req.body);
-		if (error) return res.json({
-            code: 500,
-            message: error.details[0].message,
-        })
+		if (error)
+			return res.json({
+				code: 500,
+				message: error.details[0].message,
+			});
 
 		//Check exist account
 		const existUsername = await User.findOne({ username: req.body.username });
-		if (existUsername) res.json({
-            code: 500,
-            message: 'Username has already used by another user',
-        })
+		if (existUsername)
+			return res.json({
+				code: 500,
+				error: 'username',
+				message: 'Username has already used by another user',
+			});
 
 		const existEmail = await User.findOne({ email: req.body.email });
 		console.log(existEmail);
-		if (existEmail) return res.json({
-            code: 500,
-            message: 'Email has already used by another user',
-        })
+		if (existEmail)
+			return res.json({
+				code: 500,
+				error: 'email',
+				message: 'Email has already used by another user',
+			});
 
 		//Hash password
 		const salt = await bcrypt.genSalt(10);
@@ -35,7 +40,7 @@ class AuthController {
 			username: req.body.username,
 			password: hashedPassword,
 			email: req.body.email,
-			avatarUrl: '/uploads/default.jpg',
+			photoURL: '/uploads/default.jpg',
 			role: 'User',
 		});
 

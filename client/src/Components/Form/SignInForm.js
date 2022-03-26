@@ -40,7 +40,19 @@ const SignInForm = ({ mounted, setUser, setMounted, setSignUp }) => {
 		setSignUp(true);
 	};
 	const onSubmitHandler = (values) => {
-		console.log(values);
+		fetch('http://localhost:5555/auth/login', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(values),
+		})
+			.then((response) => {
+				return response.text();
+			})
+			.then((data) => {
+				console.log(data);
+			});
 	};
 
 	const handleSignIn = async (provider) => {
@@ -52,7 +64,7 @@ const SignInForm = ({ mounted, setUser, setMounted, setSignUp }) => {
 		}
 	};
 	return (
-		<div className="px-3 py-5 bg-secondary rounded-xl">
+		<div className="px-3 py-5 mx-2 bg-secondary rounded-xl">
 			<h2 className="mb-3 text-2xl font-bold text-center uppercase text-third">Login</h2>
 			<div className="flex flex-col gap-3 mx-10 my-5 md:justify-center md:items-center md:mx-10 md:flex-row">
 				<Button
