@@ -19,6 +19,10 @@ const userSchema = new Schema({
         max: 50,
         min: 8
     },
+    avatarUrl: {
+        type: String,
+        required: true,
+    },
     role: {
         type: String,
         required: true

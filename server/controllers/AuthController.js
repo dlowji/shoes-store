@@ -26,7 +26,8 @@ class AuthController {
             username: req.body.username,
             password: hashedPassword,
             email: req.body.email,
-            role: "Admin",
+            avatarUrl: '/uploads/default.jpg',
+            role: "User",
         })
 
         try {
