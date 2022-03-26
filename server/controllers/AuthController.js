@@ -7,17 +7,25 @@ const User = require('../models/User');
 class AuthController {
 	async register(req, res) {
 		//VALIDATE
-		console.log(req.body);
 		const { error } = registerValidate(req.body);
-		if (error) return errorMessage(res, 500, error.details[0].message);
+		if (error) return res.json({
+            code: 500,
+            message: error.details[0].message,
+        })
 
 		//Check exist account
 		const existUsername = await User.findOne({ username: req.body.username });
-		if (existUsername) return errorMessage(res, 500, 'Username has already used by another user');
+		if (existUsername) res.json({
+            code: 500,
+            message: 'Username has already used by another user',
+        })
 
 		const existEmail = await User.findOne({ email: req.body.email });
 		console.log(existEmail);
-		if (existEmail) return errorMessage(res, 500, 'Email has already used by another user');
+		if (existEmail) return res.json({
+            code: 500,
+            message: 'Email has already used by another user',
+        })
 
 		//Hash password
 		const salt = await bcrypt.genSalt(10);
@@ -33,7 +41,7 @@ class AuthController {
 
 		try {
 			const savedUser = await user.save();
-			successMessage(res, savedUser._id, 'User created successfully');
+			successMessage(res, savedUser, 'User created successfully');
 		} catch (err) {
 			console.log(err);
 			errorMessage(res, 500, err.message);
