@@ -24,7 +24,6 @@ class AuthController {
 			});
 
 		const existEmail = await User.findOne({ email: req.body.email });
-		console.log(existEmail);
 		if (existEmail)
 			return res.json({
 				code: 500,
@@ -56,15 +55,26 @@ class AuthController {
 	async login(req, res) {
 		//VALIDATE
 		const { error } = loginValidate(req.body);
-		if (error) return errorMessage(res, 500, error.details[0].message);
+		if (error) return res.json({
+			code: 500,
+			message: error.details[0].message,
+		})
 
 		//Check exist account
 		const existAccount = await User.findOne({ username: req.body.username });
-		if (!existAccount) return errorMessage(res, 500, 'Wrong username or password');
+		if (!existAccount) return res.json({
+			code: 500,
+			error: 'username',
+			message: 'This account is not registered'
+		})
 
 		//Detect password
 		const validPass = await bcrypt.compare(req.body.password, existAccount.password);
-		if (!validPass) return errorMessage(res, 500, 'Wrong username or password');
+		if (!validPass) return res.json({
+			code: 500,
+			error: 'password',
+			message: 'Wrong password'
+		})
 
 		//Create and assign a token
 		const token = jwt.sign({ _id: existAccount._id }, process.env.TOKEN_SECRET);
