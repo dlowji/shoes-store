@@ -5,10 +5,17 @@ import SignUpForm from '../Form/SignUpForm';
 import { useNavigate } from 'react-router-dom';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
+import ToastMessage from '../Toast/ToastMessage';
 
 const Modal = ({ user, setUser }) => {
 	const [showSignIn, setShowSignIn] = React.useState(false);
 	const [showSignUp, setShowSignUp] = React.useState(false);
+	const [toastMessage, setToastMessage] = React.useState({
+		show: false,
+		title: '',
+		message: '',
+	});
+
 	let navigate = useNavigate();
 	const handleSignIn = () => {
 		setShowSignIn(() => setShowSignIn(true));
@@ -25,6 +32,11 @@ const Modal = ({ user, setUser }) => {
 				navigate('');
 				localStorage.removeItem('user');
 				setUser(null);
+				setToastMessage({
+					show: true,
+					title: 'success',
+					message: 'Signed out successfully',
+				});
 				console.log('Successfully signed out!');
 			})
 			.catch(() => {
@@ -36,7 +48,19 @@ const Modal = ({ user, setUser }) => {
 			setShowSignIn(false);
 			setShowSignUp(false);
 		}
+		return () => {};
 	}, [user]);
+	React.useEffect(() => {
+		if (toastMessage.show) {
+			setTimeout(() => {
+				setToastMessage({
+					show: false,
+					title: '',
+					message: '',
+				});
+			}, 3000);
+		}
+	}, [toastMessage.show]);
 	return (
 		<>
 			<div className="text-[#fff] login cursor-pointer w-[30px] h-[30px] rounded-full flex items-center justify-center">
@@ -77,6 +101,7 @@ const Modal = ({ user, setUser }) => {
 					setUser={setUser}
 					setMounted={setShowSignIn}
 					setSignUp={setShowSignUp}
+					setToastMessage={setToastMessage}
 				></SignInForm>
 			</ModalBase>
 			<ModalBase visible={showSignUp} onClose={() => setShowSignUp(false)}>
@@ -85,8 +110,16 @@ const Modal = ({ user, setUser }) => {
 					mounted={showSignUp}
 					setMounted={setShowSignUp}
 					setSignIn={setShowSignIn}
+					setToastMessage={setToastMessage}
 				></SignUpForm>
 			</ModalBase>
+			{toastMessage?.show && (
+				<ToastMessage
+					mounted={toastMessage.show}
+					title={toastMessage.title}
+					message={toastMessage.message}
+				></ToastMessage>
+			)}
 		</>
 	);
 };

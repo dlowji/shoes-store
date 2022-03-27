@@ -106,7 +106,7 @@ const Dashboard = () => {
 	}, [toastMessage.show]);
 	return (
 		<div
-			className={`mb-[30px] mr-0 ml-0 px-5 transition-all duration-500 ease-in-out md:mx-auto max-w-[1400px]`}
+			className={`mb-[30px] mr-0 ml-0 px-2 md:px-5 transition-all duration-500 ease-in-out md:mx-auto max-w-[1400px]`}
 		>
 			<div className="w-full bg-primary h-[100px] rounded-xl mt-5 flex items-center justify-between p-4">
 				<img src={logo} alt="logo" className="block object-cover" />
@@ -163,10 +163,10 @@ const Dashboard = () => {
 							);
 						})}
 						<div
-							className="flex flex-col items-center justify-center p-3 cursor-pointer bg-secondary rounded-xl min-h-[400px]"
+							className="fixed w-[50px] h-[50px] flex items-center justify-center bottom-0 left-0 mb-5 ml-5 bg-primary rounded-xl text-secondary cursor-pointer"
 							onClick={handleAddProduct}
 						>
-							<i className="fa-solid fa-plus text-[50px]"></i>
+							<i className="pointer-events-none fa-solid fa-plus text-[30px]"></i>
 						</div>
 					</>
 				) : (

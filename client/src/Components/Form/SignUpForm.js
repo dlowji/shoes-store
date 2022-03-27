@@ -5,11 +5,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import './form.css';
 import Input from './Input/Input';
-import Loading from '../Loading/Loading';
 
-const SignUpForm = ({ setUser, mounted, setMounted, setSignIn }) => {
+const SignUpForm = ({ setToastMessage, setUser, mounted, setMounted, setSignIn }) => {
 	const [showPassword, setShowPassword] = React.useState(false);
-	const [loading, setLoading] = React.useState(false);
 	const scheme = yup
 		.object({
 			userNameSignup: yup
@@ -65,7 +63,6 @@ const SignUpForm = ({ setUser, mounted, setMounted, setSignIn }) => {
 	// Handle submit
 	const onSubmitHandler = (values) => {
 		const { userNameSignup, emailSignUp, passwordSignUp } = values;
-		console.log({ username: userNameSignup, email: emailSignUp, password: passwordSignUp });
 		fetch('http://localhost:5555/auth/register', {
 			method: 'POST',
 			headers: {
@@ -81,7 +78,6 @@ const SignUpForm = ({ setUser, mounted, setMounted, setSignIn }) => {
 				return response.json();
 			})
 			.then((data) => {
-				console.log(data);
 				if (data.code !== 0) {
 					if (data.error === 'username') {
 						setError('userNameSignup', {
@@ -97,105 +93,99 @@ const SignUpForm = ({ setUser, mounted, setMounted, setSignIn }) => {
 				} else {
 					setUser(data.data);
 					localStorage.setItem('user', JSON.stringify(data.data));
+					setToastMessage({
+						show: true,
+						title: 'success',
+						message: 'Sign up successfully',
+					});
 				}
 			});
 	};
 	return (
-		<>
-			{loading ? (
-				<Loading></Loading>
-			) : (
-				<div className="flex flex-col justify-center px-3 py-5 mx-2 bg-secondary rounded-xl">
-					<h2 className="mb-3 text-2xl font-bold text-center uppercase text-third">Register</h2>
-					<form autoComplete="off" onSubmit={handleSubmit(onSubmitHandler)}>
-						<div className="flex flex-col gap-2">
-							<label htmlFor="userNameSignup">User name</label>
-							<Input
-								type="text"
-								name="userNameSignup"
-								id="userNameSignup"
-								placeholder="Enter your user name"
-								control={control}
-							></Input>
-							<p className="text-[#E74C3C] text-base font-bold h-5 relative -top-2">
-								{errors.userNameSignup ? errors.userNameSignup?.message : ''}
-							</p>
-						</div>
-						<div className="flex flex-col gap-2">
-							<label htmlFor="emailSignUp">Email address</label>
-							<Input
-								type="email"
-								name="emailSignUp"
-								id="emailSignUp"
-								placeholder="Enter your email"
-								control={control}
-							></Input>
-							<p className="text-[#E74C3C] text-base font-bold h-5 relative -top-2">
-								{errors.emailSignUp ? errors.emailSignUp?.message : ''}
-							</p>
-						</div>
-						<div className="relative flex flex-col gap-2 my-2">
-							<label htmlFor="passwordSignUp">Password</label>
-							<Input
-								type={`${showPassword ? 'text' : 'password'}`}
-								name="passwordSignUp"
-								id="passwordSignUp"
-								placeholder="Enter your password"
-								autoComplete="off"
-								control={control}
-							></Input>
-							<i
-								className={`fa fa-eye absolute top-[calc(50%-10px)] right-6 -translate-y-1/2sssssss cursor-pointer hover:text-primary transition-colors ${
-									showPassword ? 'text-primary' : ''
-								}`}
-								onClick={() => setShowPassword(!showPassword)}
-							></i>
-							<p className="text-[#E74C3C] text-base font-bold h-5 relative -top-2">
-								{errors.passwordSignUp ? errors.passwordSignUp?.message : ''}
-							</p>
-						</div>
-						<div className="relative flex flex-col gap-2 my-2">
-							<label htmlFor="passwordSignUpConfirm">Confirm Password</label>
-							<Input
-								type={`${showPassword ? 'text' : 'password'}`}
-								name="passwordSignUpConfirm"
-								id="passwordSignUpConfirm"
-								placeholder="Enter your password"
-								autoComplete="off"
-								control={control}
-							></Input>
-							{/* <i
+		<div className="flex flex-col justify-center px-3 py-5 mx-2 bg-secondary rounded-xl">
+			<h2 className="mb-3 text-2xl font-bold text-center uppercase text-third">Register</h2>
+			<form autoComplete="off" onSubmit={handleSubmit(onSubmitHandler)}>
+				<div className="flex flex-col gap-2">
+					<label htmlFor="userNameSignup">User name</label>
+					<Input
+						type="text"
+						name="userNameSignup"
+						id="userNameSignup"
+						placeholder="Enter your user name"
+						control={control}
+					></Input>
+					<p className="text-[#E74C3C] text-base font-bold h-5 relative -top-2">
+						{errors.userNameSignup ? errors.userNameSignup?.message : ''}
+					</p>
+				</div>
+				<div className="flex flex-col gap-2">
+					<label htmlFor="emailSignUp">Email address</label>
+					<Input
+						type="email"
+						name="emailSignUp"
+						id="emailSignUp"
+						placeholder="Enter your email"
+						control={control}
+					></Input>
+					<p className="text-[#E74C3C] text-base font-bold h-5 relative -top-2">
+						{errors.emailSignUp ? errors.emailSignUp?.message : ''}
+					</p>
+				</div>
+				<div className="relative flex flex-col gap-2 my-2">
+					<label htmlFor="passwordSignUp">Password</label>
+					<Input
+						type={`${showPassword ? 'text' : 'password'}`}
+						name="passwordSignUp"
+						id="passwordSignUp"
+						placeholder="Enter your password"
+						autoComplete="off"
+						control={control}
+					></Input>
+					<i
+						className={`fa fa-eye absolute top-[calc(50%-10px)] right-6 -translate-y-1/2sssssss cursor-pointer hover:text-primary transition-colors ${
+							showPassword ? 'text-primary' : ''
+						}`}
+						onClick={() => setShowPassword(!showPassword)}
+					></i>
+					<p className="text-[#E74C3C] text-base font-bold h-5 relative -top-2">
+						{errors.passwordSignUp ? errors.passwordSignUp?.message : ''}
+					</p>
+				</div>
+				<div className="relative flex flex-col gap-2 my-2">
+					<label htmlFor="passwordSignUpConfirm">Confirm Password</label>
+					<Input
+						type={`${showPassword ? 'text' : 'password'}`}
+						name="passwordSignUpConfirm"
+						id="passwordSignUpConfirm"
+						placeholder="Enter your password"
+						autoComplete="off"
+						control={control}
+					></Input>
+					{/* <i
 								className={`fa fa-eye absolute top-[calc(50%-10px)] right-6 -translate-y-1/2sssssss cursor-pointer hover:text-primary transition-colors ${
 									showPassword ? 'text-primary' : ''
 								}`}
 								onClick={() => setShowPassword(!showPassword)}
 							></i> */}
-							<p className="text-[#E74C3C] text-base font-bold h-5 relative -top-2">
-								{errors.passwordSignUpConfirm ? errors.passwordSignUpConfirm?.message : ''}
-							</p>
-						</div>
-						<Button
-							text={'Sign in'}
-							type="submit"
-							className={
-								'py-4 bg-primary text-secondary font-bold normal-case hover:opacity-90 transition-all w-full'
-							}
-						></Button>
-					</form>
-					<div className="flex items-center justify-center mt-5 whitespace-nowrap">
-						<span className="block">Already have an account?</span>
-						<button
-							component="a"
-							href="#"
-							className="block ml-2 text-primary"
-							onClick={handleSignIn}
-						>
-							Sign in
-						</button>
-					</div>
+					<p className="text-[#E74C3C] text-base font-bold h-5 relative -top-2">
+						{errors.passwordSignUpConfirm ? errors.passwordSignUpConfirm?.message : ''}
+					</p>
 				</div>
-			)}
-		</>
+				<Button
+					text={'Sign in'}
+					type="submit"
+					className={
+						'py-4 bg-primary text-secondary font-bold normal-case hover:opacity-90 transition-all w-full'
+					}
+				></Button>
+			</form>
+			<div className="flex items-center justify-center mt-5 whitespace-nowrap">
+				<span className="block">Already have an account?</span>
+				<button component="a" href="#" className="block ml-2 text-primary" onClick={handleSignIn}>
+					Sign in
+				</button>
+			</div>
+		</div>
 	);
 };
 

@@ -8,20 +8,24 @@ import Input from './Input/Input';
 import { facebookProvider, googleProvider } from '../Services/authMethod';
 import socialMediaAuth from '../Services/auth';
 
-const SignInForm = ({ mounted, setUser, setMounted, setSignUp }) => {
+const SignInForm = ({ setToastMessage, setUser, setMounted, setSignUp }) => {
 	const [showPassword, setShowPassword] = React.useState(false);
 	const scheme = yup
 		.object({
-			userSignin: yup.string().required('Username is required'),
+			userSignin: yup
+				.string()
+				.min(8, 'Username must be at least 8 characters')
+				.required('Username is required'),
 			passwordSignIn: yup.string().required('Password is required'),
 		})
 		.required();
 	const {
 		handleSubmit,
 		control,
+		setError,
 		formState: { errors },
 	} = useForm({
-		defaultValues: { userSignin: '', passwordSignIn: '' },
+		defaultValues: { userSignin: 'adminstore', passwordSignIn: 'admin123456' },
 		resolver: yupResolver(scheme),
 	});
 	React.useEffect(() => {
@@ -45,13 +49,32 @@ const SignInForm = ({ mounted, setUser, setMounted, setSignUp }) => {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(values),
+			body: JSON.stringify({
+				username: values.userSignin,
+				password: values.passwordSignIn,
+			}),
 		})
 			.then((response) => {
-				return response.text();
+				return response.json();
 			})
 			.then((data) => {
-				console.log(data);
+				if (data.code === 0) {
+					setUser(data.data);
+					localStorage.setItem('user', JSON.stringify(data.data));
+					setToastMessage({
+						show: true,
+						title: 'success',
+						message: 'Login successfully',
+					});
+					setMounted(false);
+				} else {
+					if (data.error) {
+						setError('passwordSignIn', {
+							type: 'manual',
+							message: 'Username or password is incorrect',
+						});
+					}
+				}
 			});
 	};
 
