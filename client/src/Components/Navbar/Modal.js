@@ -6,23 +6,20 @@ import { useNavigate } from 'react-router-dom';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import ToastMessage from '../Toast/ToastMessage';
+import { useUserContext } from '../../contexts/userContext';
+import { useFormContext } from '../../contexts/formContext';
 
-const Modal = ({ user, setUser }) => {
-	const [showSignIn, setShowSignIn] = React.useState(false);
-	const [showSignUp, setShowSignUp] = React.useState(false);
+const Modal = () => {
+	const { user, setUser, setCart } = useUserContext();
+	const { showSignIn, setShowSignIn, showSignUp, setShowSignUp, handleSignIn, handleSignUp } =
+		useFormContext();
 	const [toastMessage, setToastMessage] = React.useState({
 		show: false,
 		title: '',
 		message: '',
 	});
-
 	let navigate = useNavigate();
-	const handleSignIn = () => {
-		setShowSignIn(() => setShowSignIn(true));
-	};
-	const handleSignUp = () => {
-		setShowSignUp(() => setShowSignUp(true));
-	};
+
 	const handleSignOut = () => {
 		firebase
 			.auth()
@@ -32,6 +29,7 @@ const Modal = ({ user, setUser }) => {
 				navigate('');
 				localStorage.removeItem('user');
 				setUser(null);
+				setCart([]);
 				setToastMessage({
 					show: true,
 					title: 'success',
@@ -49,6 +47,7 @@ const Modal = ({ user, setUser }) => {
 			setShowSignUp(false);
 		}
 		return () => {};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);
 	React.useEffect(() => {
 		if (toastMessage.show) {
@@ -96,22 +95,10 @@ const Modal = ({ user, setUser }) => {
 				</div>
 			</div>
 			<ModalBase visible={showSignIn} onClose={() => setShowSignIn(false)}>
-				<SignInForm
-					mounted={showSignIn}
-					setUser={setUser}
-					setMounted={setShowSignIn}
-					setSignUp={setShowSignUp}
-					setToastMessage={setToastMessage}
-				></SignInForm>
+				<SignInForm setToastMessage={setToastMessage}></SignInForm>
 			</ModalBase>
 			<ModalBase visible={showSignUp} onClose={() => setShowSignUp(false)}>
-				<SignUpForm
-					setUser={setUser}
-					mounted={showSignUp}
-					setMounted={setShowSignUp}
-					setSignIn={setShowSignIn}
-					setToastMessage={setToastMessage}
-				></SignUpForm>
+				<SignUpForm setToastMessage={setToastMessage}></SignUpForm>
 			</ModalBase>
 			{toastMessage?.show && (
 				<ToastMessage

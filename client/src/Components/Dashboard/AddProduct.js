@@ -7,11 +7,14 @@ import Input from '../Form/Input/Input';
 import TextArea from '../Form/TextArea/TextArea';
 import './Product.css';
 import fetchProducts from '../Products/getProducts';
+import { useDashboardContext } from '../../contexts/dashboardContext';
+import { useToastMessage } from '../../contexts/toastMessageContext';
 
-const AddProduct = ({ setAddProduct, setProducts, setToastMessage }) => {
+const AddProduct = () => {
 	const [selectedImage, setSelectedImage] = useState(null);
+	const { setToastMessage } = useToastMessage();
+	const { setAddProduct, setProducts } = useDashboardContext();
 	const form = useRef(null);
-
 	const scheme = yup
 		.object({
 			nameProduct: yup
@@ -38,7 +41,7 @@ const AddProduct = ({ setAddProduct, setProducts, setToastMessage }) => {
 			nameProduct: '',
 			brandProduct: '',
 			priceProduct: '',
-			starProduct: '',
+			starProduct: '0',
 			descriptionProduct: '',
 			imageProduct: '',
 		},
@@ -76,7 +79,7 @@ const AddProduct = ({ setAddProduct, setProducts, setToastMessage }) => {
 
 	return (
 		<>
-			<div className="w-full max-w-[600px] mx-auto bg-secondary px-3 py-5 rounded-xl flex flex-col justify-center">
+			<div className="w-full max-w-[600px] mx-auto bg-secondary p-2 max-h-[750px] h-full overflow-auto rounded-xl flex flex-col justify-center">
 				<h2 className="mb-3 text-2xl font-bold text-center uppercase text-third">Add Product</h2>
 				<form
 					autoComplete="off"
@@ -166,7 +169,7 @@ const AddProduct = ({ setAddProduct, setProducts, setToastMessage }) => {
 						{selectedImage && (
 							<img
 								alt="not found"
-								className="w-[150px] h-[150px] object-cover rounded-lg"
+								className="w-[200px] h-[80px] object-cover rounded-lg"
 								src={URL.createObjectURL(selectedImage)}
 							/>
 						)}

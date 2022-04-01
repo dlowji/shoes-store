@@ -7,8 +7,12 @@ import './form.css';
 import Input from './Input/Input';
 import { facebookProvider, googleProvider } from '../Services/authMethod';
 import socialMediaAuth from '../Services/auth';
+import { useUserContext } from '../../contexts/userContext';
+import { useFormContext } from '../../contexts/formContext';
 
-const SignInForm = ({ setToastMessage, setUser, setMounted, setSignUp }) => {
+const SignInForm = ({ setToastMessage }) => {
+	const { setUser } = useUserContext();
+	const { setShowSignIn, setShowSignUp } = useFormContext();
 	const [showPassword, setShowPassword] = React.useState(false);
 	const scheme = yup
 		.object({
@@ -31,7 +35,7 @@ const SignInForm = ({ setToastMessage, setUser, setMounted, setSignUp }) => {
 	React.useEffect(() => {
 		const handleClick = (e) => {
 			if (e.target.matches('.fixed.inset-0')) {
-				setMounted(false);
+				setShowSignIn(false);
 			}
 		};
 		document.addEventListener('click', handleClick);
@@ -40,8 +44,8 @@ const SignInForm = ({ setToastMessage, setUser, setMounted, setSignUp }) => {
 		};
 	});
 	const handleSignUp = () => {
-		setMounted(false);
-		setSignUp(true);
+		setShowSignIn(false);
+		setShowSignUp(true);
 	};
 	const onSubmitHandler = (values) => {
 		fetch('http://localhost:5555/auth/login', {
@@ -66,7 +70,7 @@ const SignInForm = ({ setToastMessage, setUser, setMounted, setSignUp }) => {
 						title: 'success',
 						message: 'Login successfully',
 					});
-					setMounted(false);
+					setShowSignIn(false);
 				} else {
 					if (data.error) {
 						setError('passwordSignIn', {

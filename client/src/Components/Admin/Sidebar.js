@@ -4,8 +4,12 @@ import dashboard from '../../config/dashboardData';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import './Admin.css';
+import { useUserContext } from '../../contexts/userContext';
+import { useToastMessage } from '../../contexts/toastMessageContext';
 
-const Sidebar = ({ user, setUser, activeSidebar, setActiveSidebar }) => {
+const Sidebar = () => {
+	const { user, setUser, activeSidebar, setActiveSidebar } = useUserContext();
+	const { setToastMessage } = useToastMessage();
 	const [activeIndex, setActiveIndex] = React.useState(0);
 	let navigate = useNavigate();
 	const location = useLocation();
@@ -16,6 +20,11 @@ const Sidebar = ({ user, setUser, activeSidebar, setActiveSidebar }) => {
 			.then(() => {
 				console.log('signed out');
 				navigate('');
+				setToastMessage({
+					show: true,
+					title: 'success',
+					message: 'You have signed out successfully',
+				});
 				localStorage.removeItem('user');
 				setUser(null);
 				console.log('Successfully signed out!');

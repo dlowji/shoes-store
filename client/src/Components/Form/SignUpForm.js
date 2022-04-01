@@ -5,8 +5,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import './form.css';
 import Input from './Input/Input';
+import { useUserContext } from '../../contexts/userContext';
+import { useFormContext } from '../../contexts/formContext';
 
-const SignUpForm = ({ setToastMessage, setUser, mounted, setMounted, setSignIn }) => {
+const SignUpForm = ({ setToastMessage }) => {
+	const { setUser } = useUserContext();
+	const { setShowSignUp, setShowSignIn } = useFormContext();
 	const [showPassword, setShowPassword] = React.useState(false);
 	const scheme = yup
 		.object({
@@ -47,7 +51,7 @@ const SignUpForm = ({ setToastMessage, setUser, mounted, setMounted, setSignIn }
 	React.useEffect(() => {
 		const handleClick = (e) => {
 			if (e.target.matches('.fixed.inset-0')) {
-				setMounted(false);
+				setShowSignUp(false);
 			}
 		};
 		document.addEventListener('click', handleClick);
@@ -57,8 +61,8 @@ const SignUpForm = ({ setToastMessage, setUser, mounted, setMounted, setSignIn }
 	});
 	console.log(errors);
 	const handleSignIn = () => {
-		setMounted(false);
-		setSignIn(true);
+		setShowSignUp(false);
+		setShowSignIn(true);
 	};
 	// Handle submit
 	const onSubmitHandler = (values) => {
@@ -161,12 +165,6 @@ const SignUpForm = ({ setToastMessage, setUser, mounted, setMounted, setSignIn }
 						autoComplete="off"
 						control={control}
 					></Input>
-					{/* <i
-								className={`fa fa-eye absolute top-[calc(50%-10px)] right-6 -translate-y-1/2sssssss cursor-pointer hover:text-primary transition-colors ${
-									showPassword ? 'text-primary' : ''
-								}`}
-								onClick={() => setShowPassword(!showPassword)}
-							></i> */}
 					<p className="text-[#E74C3C] text-base font-bold h-5 relative -top-2">
 						{errors.passwordSignUpConfirm ? errors.passwordSignUpConfirm?.message : ''}
 					</p>

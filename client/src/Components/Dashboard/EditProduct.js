@@ -7,9 +7,14 @@ import Input from '../Form/Input/Input';
 import TextArea from '../Form/TextArea/TextArea';
 import './Product.css';
 import fetchProducts from '../Products/getProducts';
+import { useDashboardContext } from '../../contexts/dashboardContext';
+import { useToastMessage } from '../../contexts/toastMessageContext';
 
-const EditProduct = ({ setEditProduct, setProducts, product, setToastMessage }) => {
+const EditProduct = () => {
+	const { setEditProduct, setProducts, product } = useDashboardContext();
+	const { setToastMessage } = useToastMessage();
 	const [selectedImage, setSelectedImage] = useState(product.imgUrl);
+
 	const scheme = yup
 		.object({
 			nameProduct: yup.string().required('Name is required'),
@@ -53,23 +58,31 @@ const EditProduct = ({ setEditProduct, setProducts, product, setToastMessage }) 
 		fetch(`http://localhost:5555/admin/product/update/${product._id}`, {
 			method: 'PUT',
 			body: form,
-		}).then((res) => {
-			console.log(res);
-			if (res.status === 200) {
-				setEditProduct(false);
+		})
+			.then((res) => {
+				console.log(res);
+				if (res.status === 200) {
+					setEditProduct(false);
+					setToastMessage({
+						show: true,
+						title: 'success',
+						message: 'Product updated successfully',
+					});
+					fetchProducts().then((response) => {
+						setProducts(response.data);
+					});
+				}
+			})
+			.catch(() => {
 				setToastMessage({
 					show: true,
-					title: 'success',
-					message: 'Product updated successfully',
+					title: 'error',
+					message: 'Product updated false',
 				});
-				fetchProducts().then((response) => {
-					setProducts(response.data);
-				});
-			}
-		});
+			});
 	};
 	return (
-		<div className="w-full max-w-[600px] mx-auto bg-secondary px-3 py-5 rounded-xl flex flex-col justify-center">
+		<div className="w-full max-w-[600px] mx-auto bg-secondary p-2 max-h-[750px] h-full overflow-auto rounded-xl flex flex-col justify-center">
 			<h2 className="mb-3 text-2xl font-bold text-center uppercase text-third">Edit Product</h2>
 			<form autoComplete="off" onSubmit={handleSubmit(onSubmitHandler)}>
 				<div className="flex flex-col gap-2">
@@ -152,7 +165,7 @@ const EditProduct = ({ setEditProduct, setProducts, product, setToastMessage }) 
 					{selectedImage && (
 						<img
 							alt="not found"
-							className="w-[150px] h-[150px] object-cover rounded-lg"
+							className="w-[200px] h-[80px] object-cover rounded-lg"
 							src={
 								typeof selectedImage === 'string'
 									? selectedImage

@@ -4,13 +4,15 @@ import logo from '../../asset/logoWhite.png';
 import Modal from './Modal';
 import navbar from '../../config/navbarData';
 import './NavBar.css';
+import { FormProvider } from '../../contexts/formContext';
+import { useUserContext } from '../../contexts/userContext';
 
-const Navbar = ({ user, setUser }) => {
+const Navbar = () => {
+	const { cart } = useUserContext();
 	const [toggle, setToggle] = React.useState(false);
 	const [activeIndex, setActiveIndex] = React.useState(0);
 	const location = useLocation();
 	const menuToggle = React.useRef(null);
-
 	// Close modal when click outside
 	React.useEffect(() => {
 		function handleClickOutside(e) {
@@ -31,10 +33,11 @@ const Navbar = ({ user, setUser }) => {
 		const curPath = window.location.pathname.split('/')[1];
 		const itemIndex = navbar.findIndex((item) => item.section === curPath);
 		setActiveIndex(curPath.length === 0 ? 0 : itemIndex);
+		return () => {};
 	}, [location]);
 
 	return (
-		<header className="fixed top-0 left-0 right-0 z-50 w-full bg-primary">
+		<header className="fixed top-0 left-0 right-0 z-50 w-full px-5 bg-primary">
 			<div className="max-w-[1200px] mx-auto px-4 flex justify-between items-center min-h-[64px]">
 				<Link to="/" className="hidden md:block">
 					<img src={logo} alt="logo" className="object-cover" />
@@ -60,7 +63,7 @@ const Navbar = ({ user, setUser }) => {
 				</div>
 
 				<i
-					className="block md:hidden fas fa-bars text-secondary"
+					className="block cursor-pointer md:hidden fas fa-bars text-secondary hover:opacity-80"
 					onClick={() => setToggle(true)}
 				></i>
 
@@ -70,46 +73,40 @@ const Navbar = ({ user, setUser }) => {
 					}`}
 					ref={menuToggle}
 				>
-					<div className="w-[25px] h-[25px] ml-auto flex justify-center items-center mb-6 close-btn bg-primary rounded-full hover:text-secondary">
+					<div className="w-[25px] h-[25px] ml-auto flex justify-center items-center mb-6 close-btn bg-primary rounded-full hover:text-secondary cursor-pointer">
 						<i className="fa fa-times text-[15px] pointer-events-none"></i>
 					</div>
-					<div className="mb-3">
-						<button
-							component="a"
-							href={'#'}
-							className="block p-4 font-bold text-third hover:opacity-80 hover:text-primary"
-						>
-							HOME
-						</button>
-					</div>
-					<div className="mb-3">
-						<button
-							component="a"
-							href={'#'}
-							className="block p-4 font-bold text-third hover:opacity-80 hover:text-primary"
-						>
-							PRODUCT
-						</button>
-					</div>
-					<div className="mb-3">
-						<button
-							component="a"
-							href={'#'}
-							className="block p-4 font-bold text-third hover:opacity-80 hover:text-primary"
-						>
-							CONTACT
-						</button>
-					</div>
+
+					{navbar.map((item, index) => {
+						return (
+							<div className="mb-3" key={`nav-${index}`}>
+								<Link
+									to={item.link}
+									onClick={() => {
+										setToggle(false);
+									}}
+									className={`block p-4 font-bold text-third hover:opacity-80 hover:text-primary ${
+										activeIndex === index && 'border-b-4 border-primary'
+									}`}
+								>
+									{item.text.toUpperCase()}
+								</Link>
+							</div>
+						);
+					})}
 				</div>
 
-				{/* <img src={logo} alt="logo" className="block object-cover md:hidden" /> */}
-
 				<div className="flex items-center gap-x-[32px]">
-					<Modal user={user} setUser={setUser}></Modal>
+					<FormProvider>
+						<Modal></Modal>
+					</FormProvider>
 					<Link
 						to="/cart"
-						className="text-[#fff] cursor-pointer w-[30px] h-[30px] flex items-center justify-center"
+						className="text-[#fff] cursor-pointer w-[30px] h-[30px] flex items-center justify-center relative"
 					>
+						<span className="absolute flex items-center justify-center w-5 h-5 font-bold rounded-full -top-2 -right-2 bg-secondary text-third">
+							{cart?.length > 0 ? cart.length : 0}
+						</span>
 						<i className="text-xl fas fa-shopping-cart"></i>
 					</Link>
 				</div>

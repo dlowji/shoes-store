@@ -3,10 +3,11 @@ import Button from '../Button/Button';
 import { useParams } from 'react-router-dom';
 import Loading from '../Loading/Loading';
 import getProduct from '../Products/getProduct';
-const ProductCard = ({ toastMessage, setToastMessage, cart, setCart }) => {
+import { useUserContext } from '../../contexts/userContext';
+const ProductCard = ({ toastMessage, setToastMessage }) => {
+	const { cart, setCart } = useUserContext();
 	const [product, setProduct] = React.useState({});
 	const [loading, setLoading] = React.useState(false);
-
 	const idFind = useParams().productId;
 	React.useEffect(() => {
 		let mounted = true;
@@ -41,6 +42,7 @@ const ProductCard = ({ toastMessage, setToastMessage, cart, setCart }) => {
 				});
 			}, 3000);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [toastMessage.show]);
 	const handleAddToCart = (e) => {
 		e.preventDefault();

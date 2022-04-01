@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../Button/Button';
 import ModalBase from '../Portal/ModalBase';
 
-const Confirm = ({ visible = true, onClose = () => {}, handleDelete = () => {} }) => {
+const Confirm = ({ visible, onClose, handleDelete }) => {
 	return (
 		<ModalBase visible={visible} onClose={onClose}>
 			<div className="p-10 text-center rounded-lg bg-secondary">

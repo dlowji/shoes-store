@@ -1,109 +1,54 @@
 import React from 'react';
 import logo from '../../asset/logoWhite.png';
 import Button from '../Button/Button';
-import { useOutletContext } from 'react-router-dom';
 import './Dashboard.css';
 import fetchProducts from '../Products/getProducts';
 import EditProduct from './EditProduct';
 import AddProduct from './AddProduct';
 import ModalBase from '../Portal/ModalBase';
-import deleteProduct from '../Products/deleteProduct';
 import Loading from '../Loading/Loading';
-import getProduct from '../Products/getProduct';
-import searchProducts from '../Admin/searchProducts';
-import { debounce } from 'lodash';
-import ToastMessage from '../Toast/ToastMessage';
 import Confirm from '../Toast/Confirm';
+import { useDashboardContext } from '../../contexts/dashboardContext';
+import { useOutletContext } from 'react-router-dom';
+import { useToastMessage } from '../../contexts/toastMessageContext';
 
 const Dashboard = () => {
 	const { activeSidebar, setActiveSidebar } = useOutletContext();
-	const [products, setProducts] = React.useState([]);
-	const [editProduct, setEditProduct] = React.useState(false);
-	const [addProduct, setAddProduct] = React.useState(false);
-	const [loading, setLoading] = React.useState(false);
-	const [product, setProduct] = React.useState({});
-	const [toastMessage, setToastMessage] = React.useState({
-		show: false,
-		title: '',
-		message: '',
-	});
-	const [confirm, setConfirm] = React.useState({
-		show: false,
-		idDelete: '',
-	});
-	const handleAddProduct = () => {
-		setAddProduct(true);
-	};
-	const handleEditProduct = (e) => {
-		const idProduct = e.target.dataset.id;
-		getProduct(idProduct).then((response) => {
-			if (response.data) {
-				setProduct(response.data);
-				console.log(response.data);
-				setEditProduct(true);
-			}
-		});
-	};
-	const handleDeleteProduct = (e) => {
-		setConfirm({
-			show: true,
-			idDelete: e.target.dataset.id,
-		});
-	};
-	const handleDelete = () => {
-		deleteProduct(confirm.idDelete).then((response) => {
-			if (response.data.deletedCount === 1) {
-				setConfirm({ show: false, isDeleted: '' });
-				setToastMessage({
-					show: true,
-					title: 'success',
-					message: 'Product deleted successfully',
-				});
-				fetchProducts().then((response) => {
-					setProducts(response.data);
-				});
-			} else {
-				setConfirm({ show: false, isDeleted: '' });
-				setToastMessage({
-					show: true,
-					title: 'error',
-					message: 'Product not deleted',
-				});
-			}
-		});
-	};
-	const handleSearchInputChange = debounce((e) => {
-		if (!e.target.value) {
-			fetchProducts().then((response) => {
-				setProducts(response.data);
-			});
-		} else {
-			searchProducts(e.target.value).then((response) => {
-				console.log(response);
-				if (response.data && response.data.length > 0) {
-					setProducts(response.data);
-				}
-			});
-		}
-	}, 500);
+	const {
+		products,
+		setProducts,
+		editProduct,
+		setEditProduct,
+		addProduct,
+		setAddProduct,
+		loading,
+		setLoading,
+		handleAddProduct,
+		handleEditProduct,
+		handleDeleteProduct,
+		handleSearchInputChange,
+		confirm,
+		setConfirm,
+		handleDelete,
+	} = useDashboardContext();
+
+	const { toastMessage } = useToastMessage();
+
 	React.useEffect(() => {
 		setLoading(true);
+		let mouted = false;
 		fetchProducts().then((response) => {
-			setProducts(response.data);
-			setLoading(false);
+			if (!mouted) {
+				setProducts(response.data);
+				setLoading(false);
+			}
 		});
+		return () => {
+			mouted = true;
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-	React.useEffect(() => {
-		if (toastMessage.show) {
-			setTimeout(() => {
-				setToastMessage({
-					show: false,
-					title: '',
-					message: '',
-				});
-			}, 3000);
-		}
-	}, [toastMessage.show]);
+
 	return (
 		<div
 			className={`mb-[30px] mr-0 ml-0 px-2 md:px-5 transition-all duration-500 ease-in-out md:mx-auto max-w-[1400px]`}
@@ -174,32 +119,16 @@ const Dashboard = () => {
 				)}
 			</div>
 			<ModalBase visible={addProduct} onClose={() => setAddProduct(false)}>
-				<AddProduct
-					setAddProduct={setAddProduct}
-					setProducts={setProducts}
-					setToastMessage={setToastMessage}
-				/>
+				<AddProduct />
 			</ModalBase>
 			<ModalBase visible={editProduct} onClose={() => setEditProduct(false)}>
-				<EditProduct
-					setEditProduct={setEditProduct}
-					setProducts={setProducts}
-					product={product}
-					setToastMessage={setToastMessage}
-				/>
+				<EditProduct />
 			</ModalBase>
 			<Confirm
 				visible={confirm.show}
-				onClose={() => setConfirm({ show: false, idDelete: '' })}
+				onClose={() => setConfirm({ show: false, id: '' })}
 				handleDelete={handleDelete}
 			></Confirm>
-			{toastMessage?.show && (
-				<ToastMessage
-					mounted={toastMessage.show}
-					title={toastMessage.title}
-					message={toastMessage.message}
-				></ToastMessage>
-			)}
 		</div>
 	);
 };

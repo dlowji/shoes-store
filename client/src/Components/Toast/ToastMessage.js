@@ -46,7 +46,7 @@ const ToastMessage = ({ title, message, mounted = false, setMounted = () => {} }
 							setMounted(false);
 						}}
 					>
-						<i className="fas fa-times"></i>
+						<i className="pointer-events-none fas fa-times"></i>
 					</div>
 				</div>
 			</div>
