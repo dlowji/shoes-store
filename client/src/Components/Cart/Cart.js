@@ -4,11 +4,13 @@ import { useToastMessage } from '../../contexts/toastMessageContext';
 import { useUserContext } from '../../contexts/userContext';
 import Button from '../Button/Button';
 import Confirm from '../Toast/Confirm';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
 	const { cart, setCart } = useUserContext();
 	const { setToastMessage } = useToastMessage();
 	const { confirm, setConfirm } = useDashboardContext();
+	const navigate = useNavigate();
 	React.useEffect(() => {
 		setConfirm({
 			show: false,
@@ -19,7 +21,14 @@ const Cart = () => {
 	}, [cart]);
 
 	const handleBuy = () => {
-		console.log(cart);
+		if (cart && cart.length > 0) {
+			setToastMessage({
+				show: true,
+				title: 'error',
+				message: 'This function is not available',
+			});
+			navigate('*');
+		}
 	};
 	const handleDelete = () => {
 		const newCart = cart.filter((item) => {

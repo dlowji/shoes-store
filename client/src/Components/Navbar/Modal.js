@@ -49,17 +49,7 @@ const Modal = () => {
 		return () => {};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);
-	React.useEffect(() => {
-		if (toastMessage.show) {
-			setTimeout(() => {
-				setToastMessage({
-					show: false,
-					title: '',
-					message: '',
-				});
-			}, 3000);
-		}
-	}, [toastMessage.show]);
+
 	return (
 		<>
 			<div className="text-[#fff] login cursor-pointer w-[30px] h-[30px] rounded-full flex items-center justify-center">
